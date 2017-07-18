@@ -32,7 +32,7 @@ incidence_calc <- function(N = 5000, N_H = 1000,
                             MDRI = 210, RSE_MDRI = 0.05, FRR = 0.005, RSE_FRR = 0.19,
                             BigT = 700){
   
-  temp<-inccounts(N = N, N_H = N_H,
+  temp<-inccounts(N = c(N), N_H = N_H,
                   N_testR = N_testR, N_R = N_R,
                   DE_H = DE_H, DE_R = DE_R,
                   Boot = TRUE,
@@ -51,7 +51,7 @@ risk_of_infection_calc <- function(N = 5000, N_H = 1000,
                            MDRI = 210, RSE_MDRI = 0.05, FRR = 0.005, RSE_FRR = 0.19,
                            BigT = 700){
   
-  temp<-inccounts(N = N, N_H = N_H,
+  temp<-inccounts(N = c(N), N_H = N_H,
                   N_testR = N_testR, N_R = N_R,
                   DE_H = DE_H, DE_R = DE_R,
                   Boot = TRUE,

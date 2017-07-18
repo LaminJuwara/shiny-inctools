@@ -25,11 +25,11 @@ shinyServer(function(input, output, session){
   #shinyURL.server(session)
   df <- reactive({
     temp <- mdply(expand.grid(n = seq(input$n_range[1],input$n_range[2], by = 100),
-                              I = input$I,
-                              PrevH = input$PrevH,
-                              CR = input$CR, 
-                              MDRI = input$MDRI, RSE_MDRI = input$RSE_MDRI,
-                              FRR = input$FRR, RSE_FRR = input$RSE_FRR,
+                              I = input$I/100,
+                              PrevH = input$PrevH/100,
+                              CR = input$CR/100, 
+                              MDRI = input$MDRI, RSE_MDRI = input$RSE_MDRI/100,
+                              FRR = input$FRR/100, RSE_FRR = input$RSE_FRR/100,
                               BigT = input$BigT),  
                   ss_calc_precision)
     return(temp)
@@ -49,12 +49,15 @@ shinyServer(function(input, output, session){
 # Output value  
   output$plot <- renderPlot({
     validate(
-      need(!(input$RSE_FRR < 0 ), 'Please provide a value for RSE_FRR'),
-      need(!(input$RSE_FRR > 100), 'Please provide a value for RSE_FRR'),
-      need(input$RSE_FRR >= 0, 'Please provide a valid covariance value for FRR'),
-      need(input$RSE_FRR <= 100, 'Please provide a valid covariance value for FRR'),
-      need(input$RSE_MDRI >= 0, 'Please provide a valid covariance value for MDRI'),
-      need(input$RSE_MDRI <= 100, 'Please provide a valid covariance value for MDRI'),
+      need(input$RSE_FRR >= 0, 'Please provide a valid RSE for FRR'),
+      need(input$RSE_FRR <= 100, 'Please provide a valid RSE for FRR'),
+      need(!(input$RSE_FRR == "" ), 'Please provide a value for RSE_FRR'),
+      need(input$RSE_MDRI >= 0, 'Please provide a valid RSE for MDRI'),
+      need(input$RSE_MDRI <= 100, 'Please provide a valid RSE for MDRI'),
+      need(!(input$RSE_MDRI == "" ), 'Please provide a value for RSE_MDRI'),
+      need(input$MDRI >= 0, 'Please provide a valid value for MDRI'),
+      need(input$FRR >= 0, 'Please provide a valid value for FRR'),
+      need(input$FRR <= 100, 'Please provide a valid value for FRR'),
       need(input$I, 'Please provide an incidence value'),
       need(input$I > 0, 'Please provide a valid incidence value for survey (>0)'),
       need(input$BigT, 'Please provide a value for the cut-off time'),
@@ -71,16 +74,13 @@ shinyServer(function(input, output, session){
     plot<- plot(data[,"n"],data[,"RSE_I"],
                 main = "Relative standard error of incidence estimate as \n a function of sample size",
                 xlab = "Sample Size", 
-                ylab = "Relative standard error (%)",type = "l",col='blue',ylim = c(0,0.8))
+                ylab = "Relative standard error",type = "l",col='blue',ylim = c(0,0.8))
     abline(h = c(0.083,input$RSE_req_Inc), lty=c(2,2), col=c("red","grey"),lwd=c(1,2))
     abline(v = data[which(round(data[,"RSE_I"],2)==input$RSE_req_Inc),"n"],
            lty=2, col="grey",lwd=2)
     print(plot)
   })
 
-  
- 
-  
   # Produce an output table value.
   output$tab <- renderTable({
     data <- df()
@@ -89,7 +89,7 @@ shinyServer(function(input, output, session){
 
   output$downloadData <- downloadHandler(
     filename = function() {
-      paste(input$RSE_I, '.csv', sep='')
+      paste("downloadData-", Sys.Date(), ".csv", sep="")
     },
     content = function(file) {
       write.csv(renameTable(renameTable(df()) ) , file)
@@ -98,24 +98,22 @@ shinyServer(function(input, output, session){
 
   output$downloadPlot <- downloadHandler(
     filename = function() {
-      paste(input$RSE_I, '.pdf', sep='')
+      paste("downloadPlot-", Sys.Date(), ".jpeg", sep="")
     },
     content = function(file) {
       ##
       data <- renameTable(df())
-      
+      jpeg(filename = file)
       plot<- plot(data[,"n"],data[,"RSE_I"],
                   main = "Relative standard error of incidence estimate as \n a function of sample size",
                   xlab = "Sample Size", 
-                  ylab = "Relative standard error (%)",type = "l",col='blue',ylim = c(0,0.8))
+                  ylab = "Relative standard error",type = "l",col='blue',ylim = c(0,0.8))
       abline(h = c(0.083,input$RSE_req_Inc), lty=c(2,2), col=c("red","grey"),lwd=c(1,2))
-      abline(v = data[which(round(data[,"RSE_I"],2)==input$RSE_req_Inc),"n"],
+      abline(v = data[which(round(data[,"RSE_I"],2)==round(input$RSE_req_Inc,2)),"n"],
              lty=2, col="grey",lwd=2)
       print(plot)
+      dev.off()
  
-      #write.csv(renameTable(format_table(df(), input$scenario_case)) , file)
-      ggsave(file = file, plot = plot, width = 13, height = 9)
-      
     }
   )
 

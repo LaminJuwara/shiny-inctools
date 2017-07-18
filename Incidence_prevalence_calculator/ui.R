@@ -16,12 +16,12 @@ library(shiny)
 shinyUI(fluidPage(
 
   # Application title
-  titlePanel("Incidence/Prevalence Calculator - Based on ABIE v3"),
+  titlePanel("Incidence/Prevalence Calculator"),
   br(),
   sidebarLayout(
     sidebarPanel(
       fluidPage(
-        fluidRow(column(12, downloadButton('downloadData', 'Download table'))),
+        fluidRow(column(12, downloadButton('downloadData', 'Download Estimates'))),
 
       hr(),
       fluidPage(
@@ -35,7 +35,9 @@ shinyUI(fluidPage(
         fluidRow(
         column(12,
                numericInput("N_H", 
-                           label = "Number of HIV positive ",
+                           label = "Number of HIV positive among total",
+                           # min = 0,
+                           # max = "input.N",
                            value = 1000, 
                            step = 1)
         )
@@ -43,6 +45,8 @@ shinyUI(fluidPage(
         fluidRow(column(12,
                         numericInput("N_testR", 
                                     label = "HIV positives tested for recency",
+                                    # min = 0,
+                                    # max = "input.N_H",
                                     value = 1000, 
                                     step = 1)
         )),
@@ -50,12 +54,12 @@ shinyUI(fluidPage(
         column(12,
                numericInput("N_R", 
                            label = "Number of recent cases",
+                           # min = 0,
+                           # max = "input.N_testR",
                            value = 50, 
                            step = 1 )
         )
         )
-        
-        
       ),
 
       # fluid page for the assay parameters
@@ -65,31 +69,34 @@ shinyUI(fluidPage(
         
         fluidRow(
           column(6,
-                 sliderInput("MDRI",
+                 numericInput("MDRI",
                              label = h5("MDRI estimate (days)"),
-                             min = 0,
-                             max = 720,
                              step = 1,
                              value = 210),
-                 sliderInput("FRR",
+                 numericInput("FRR",
                              label = h5("FRR estimate (%)"),
                              min = 0,
-                             max = 10,
-                             step = 0.01,
+                             max = 100,
+                             step = 0.1,
                              value = 0.5)),
           column(6,
                  numericInput("RSE_MDRI",
-                                label = h5("MDRI estimate standard error (%)"),
-                                value = 0.05,
-                                step = 0.001),
+                                label = h5("RSE of MDRI estimate (%)"),
+                              min = 0,
+                              max = 100,
+                                value = 5,
+                                step = 0.1),
                  numericInput("RSE_FRR",
-                              label = h5("FRR estimate standard error (%)"),
-                              value = 0.2,
+                              label = h5("RSE of FRR estimate (%) "),
+                              min = 0,
+                              max = 100,
+                              value = 19,
                               step = 0.1)),
+          column(10,
                  numericInput("BigT",
                               label = h5("Cut-off time T (days)"),
                               value = 700,
-                              step = 1)
+                              step = 1))
                  )
         
       ),
@@ -122,14 +129,15 @@ shinyUI(fluidPage(
       br(),
       #plotOutput("plot")
       tabsetPanel(type = "tabs",
-                  tabPanel("Estimated Prevalence", tableOutput("tab1"),
+                  tabPanel("Estimated Prevalence", tableOutput("tab1"), plotOutput("plot1"),
                            br(),
                            p(""),
                            p(strong('Definition of Parameters')),
                            br("PrevH: Prevalence of HIV."),
                            br("RSE_PrevH: Relative standard error of PrevH"),
-                           br("PrevR: Prevalence in recently infected group"),
-                           br("RSE_PrevR: Relative standard error of PrevR")),
+                           br("PrevR: Prevalence of recency"),
+                           br("RSE_PrevR: Relative standard error of PrevR"),
+                           br("x: Sample Count")),
                   tabPanel("Estimated Incidence", tableOutput("tab2"),
                            br(),
                            p(""),
@@ -144,7 +152,22 @@ shinyUI(fluidPage(
                            p(strong('Definition of Parameters')),
                            br("ARI: Annual Risk of Infection"),
                            br("ARI.CI.low: Lower confidence limit of Annual Risk of Infection"),
-                           br("ARI.CI.up: Upper confidence limit of Annual Risk of Infection"))
+                           br("ARI.CI.up: Upper confidence limit of Annual Risk of Infection")),
+                  tabPanel("About", value='tab4_val', id = 'tab4',
+                           wellPanel( p("Calculates the point estimates and confidence intervals for prevalence,
+                                        incidence and annual risk of infection."),
+                                      p(HTML("")),
+                                      p("Contributors:"),
+                                      tags$ul(
+                                        tags$li("Eduard Grebe"),
+                                        tags$li("Stefano Ongarello"),
+                                        tags$li("Cari van Schalkwyk"),
+                                        tags$li("Alex Welte"),
+                                        tags$li("Lamin Juwara")
+                                      ),
+                                      p(em("Built using", a(strong("inctools"), href = "https://cran.r-project.org/web/packages/inctools/index.html", target = "_blank")))
+                           )
+                  )
       )
     )
   )

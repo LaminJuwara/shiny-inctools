@@ -16,7 +16,7 @@ library(shiny)
 shinyUI(fluidPage(
 
   # Application title
-  titlePanel("Sample Size for Precision - Based on ABIE v3"),
+  titlePanel("Sample Size for Precision"),
   br(),
   sidebarLayout(
     sidebarPanel(
@@ -32,7 +32,7 @@ shinyUI(fluidPage(
                         sliderInput("n_range", 
                                     label = "Sample size range",
                                     min = 0, max = 50000,
-                                    value = c(100, 30000), 
+                                    value = c(0, 50000), 
                                     step = 100, animate = FALSE)
         ))
       ),
@@ -44,27 +44,31 @@ shinyUI(fluidPage(
         
         fluidRow(
           column(6,
-                 sliderInput("MDRI",
+                 numericInput("MDRI",
                              label = h5("MDRI estimate (days)"),
                              min = 0,
                              max = 720,
                              step = 1,
                              value = 211),
-                 sliderInput("FRR",
+                 numericInput("FRR",
                              label = h5("FRR estimate (%)"),
                              min = 0,
-                             max = 10,
-                             step = 0.001,
-                             value = 0.009)),
+                             max = 100,
+                             step = 0.1,
+                             value = 0.9)),
           column(6,
                  numericInput("RSE_MDRI",
-                                label = h5("MDRI estimate standard error (%)"),
-                                value = 0.05,
-                                step = 0.01),
+                              label = h5("RSE of MDRI estimate (%)"),
+                              min = 0,
+                              max = 100,
+                              value = 5,
+                              step = 0.1),
                  numericInput("RSE_FRR",
-                              label = h5("FRR estimate standard error (%)"),
-                              value = 0.2,
-                              step = 0.01)),
+                              label = h5("RSE of FRR estimate (%)"),
+                              min = 0,
+                              max = 100,
+                              value = 20,
+                              step = 0.1)),
                  numericInput("BigT",
                               label = h5("Cut-off time T (days)"),
                               value = 720,
@@ -81,19 +85,23 @@ shinyUI(fluidPage(
           column(6,
                  numericInput("I", 
                               label = h5("Reference Incidence (% p.a)"),
-                              value = 0.017,
-                              step = 0.001)),
+                              min = 0,
+                              max = 100,
+                              value = 1.7,
+                              step = 0.1)),
           column(6,
                  numericInput("PrevH",
-                              label = h5("Reference prevalence(%)"),
-                              value = 0.1,
+                              label = h5("Reference prevalence (%)"),
+                              min = 0,
+                              max = 100,
+                              value = 10,
                               step = 0.1)),
                  sliderInput("CR", # the coverage rate probability
-                             label = h5("Coverage rate"),
+                             label = h5("Coverage rate (%)"),
                              min = 0,
-                             max = 1, 
-                             value = 0.5,
-                             step = 0.01)
+                             max = 100, 
+                             value = 50,
+                             step = 0.1)
           )),
       
       #Design Effect parameters
@@ -113,15 +121,13 @@ shinyUI(fluidPage(
                               step = 0.1)
                  )
                  )
-     
-         
         ),
       hr(),
       fluidPage(
         fluidRow(
           column(12,
                  sliderInput("RSE_req_Inc",
-                              label = h3("RSE required for incidence estimate (%)"),
+                              label = h3("RSE required for incidence estimate"),
                               value = .25, min = 0, max = 0.8,
                               step = 0.01))
         ))
@@ -142,7 +148,23 @@ shinyUI(fluidPage(
                            br("MDRI: mean duration of recent infection in days "),
                            br("RSE_MDRI: Relative standard error of MDRI"),
                            br("FRR: False recent rate "),
-                           br("n:  The Sample Size"))
+                           br("n:  The Sample Size")),
+                  tabPanel("About", value='tab4_val', id = 'tab4',
+                           wellPanel( p(""),
+                                      p(HTML("Calculates the minimum sample size required for a desired relative 
+                                             standard error (RSE) of the incidence estimat given assay characteristics,
+                                             reference epidemic state, design effects and recency test coverage.")),
+                                      p("Contributors:"),
+                                      tags$ul(
+                                        tags$li("Lamin Juwara"),
+                                        tags$li("Eduard Grebe"),
+                                        tags$li("Stefano Ongarello"),
+                                        tags$li("Cari van Schalkwyk"),
+                                        tags$li("Alex Welte")
+                                      ),
+                                      p(em("Built using", a(strong("inctools"), href = "https://cran.r-project.org/web/packages/inctools/index.html", target = "_blank")))
+                           )
+                  )
       )
     )
   )

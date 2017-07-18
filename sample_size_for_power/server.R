@@ -78,6 +78,8 @@ shinyServer(function(input, output, session) {
 
   })
   
+
+  
   output$plot <- renderPlot({
     validate(
       need(!(input$frrhatcov_1 < 0  & input$scenario_case >1), 'Please provide a value for FRR_1 covariance'),
@@ -124,10 +126,10 @@ shinyServer(function(input, output, session) {
     plot<- plot(data[,length(names(data))],data[,1],
                 main = "Probability of correcting inferring incidence 1 > incidence 2 \n as a function of sample size",
                 xlab = "Sample Size common to survey 1 and survey 2", 
-                ylab = "Probability (%)",type = "l", col='blue')
+                ylab = "Probability ",type = "l", col='blue')
     #abline(h = 0.8, v = data[which(data[,1]==0.8),"N"])
     abline(h = input$statPower,  lty=2, col="grey", lwd=2)
-    abline(v = data[which(data[,1]==input$statPower),"N"], lty=2, col="grey", lwd=2)
+    abline(v = data[which(round(data[,1],2)==input$statPower),"N"], lty=2, col="grey", lwd=2)
     print(plot)
   })
 
@@ -232,24 +234,25 @@ shinyServer(function(input, output, session) {
 
   output$downloadPlot <- downloadHandler(
     filename = function() {
-      paste("data-", Sys.Date(), ".pdf", sep="")
+      paste("data-", Sys.Date(), ".jpeg", sep="")
     },
     content = function(file) {
-      ##begin
       data <- format_table(df(), input$scenario_case)
-
+      jpeg(filename = file)
       plot<- plot(data[,length(names(data))],data[,1],
                   main = "Probability of correcting inferring incidence 1 > incidence 2 \n as a function of sample size",
                   xlab = "Sample Size common to survey 1 and survey 2", 
-                  ylab = "Probability(%)",type = "l",col='blue')
+                  ylab = "Probability",type = "l",col='blue')
       abline(h = input$statPower,  lty=2, col="grey")
-      abline(v = data[which(data[,1]==input$statPower),"N"])
+      abline(v = data[which(round(data[,1],2)==input$statPower),"N"])
       print(plot)
- 
+      dev.off()
       #write.csv(renameTable(format_table(df(), input$scenario_case)) , file)
-      ggsave(file = file, plot = plot, width = 13, height = 9)
+      # ggsave(file = file, plot = plot, width = 13, height = 9)
       
     }
   )
+  
+ 
 
 })
