@@ -116,10 +116,7 @@ shinyUI(fluidPage(
                               label = h5("Design effect for Recent infection prevalence among positives "),
                               value = 1,
                               step = 0.1)
-                 )
-                 )
-     
-         
+                 ))
         ))
     )
       ,
@@ -136,8 +133,8 @@ shinyUI(fluidPage(
                            br("PrevH: Prevalence of HIV."),
                            br("RSE_PrevH: Relative standard error of PrevH"),
                            br("PrevR: Prevalence of recency"),
-                           br("RSE_PrevR: Relative standard error of PrevR"),
-                           br("x: Sample Count")),
+                           br("RSE_PrevR: Relative standard error of PrevR")
+                           ),
                   tabPanel("Estimated Incidence", tableOutput("tab2"),
                            br(),
                            p(""),
@@ -160,10 +157,10 @@ shinyUI(fluidPage(
                                       p("Contributors:"),
                                       tags$ul(
                                         tags$li("Eduard Grebe"),
+                                        tags$li("Lamin Juwara"),
                                         tags$li("Stefano Ongarello"),
                                         tags$li("Cari van Schalkwyk"),
-                                        tags$li("Alex Welte"),
-                                        tags$li("Lamin Juwara")
+                                        tags$li("Alex Welte")
                                       ),
                                       p(em("Built using", a(strong("inctools"), href = "https://cran.r-project.org/web/packages/inctools/index.html", target = "_blank")))
                            )

@@ -21,9 +21,9 @@ shinyUI(fluidPage(
   sidebarLayout(
     sidebarPanel(
       fluidPage(
-        fluidRow(column(6, downloadButton('downloadData', 'Download table'))),
+        fluidRow(column(6, downloadButton('downloadData', 'Download Table'))),
         fluidRow(
-                 column(6, downloadButton('downloadPlot', 'Save plot'))),
+                 column(6, downloadButton('downloadPlot', 'Save Plot'))),
 
         fluidRow(column(9,
                         radioButtons("scenario_case", label = h3("Scenario Type:"),
@@ -146,12 +146,12 @@ shinyUI(fluidPage(
       fluidPage(
         #h3(""),
         fluidRow(
-          sliderInput("statPower",
-                      label = h3("Statistical Power"),
+          numericInput("statPower",
+                      label = h3("Statistical Power (%)"),
                       min = 0,
-                      max = 1,
+                      max = 100,
                       step = 0.01,
-                      value = 0.80)
+                      value = 80)
         )
          
       )
@@ -183,14 +183,15 @@ shinyUI(fluidPage(
                            wellPanel( p("Calculates the minimum sample size (common in two surveys) requited to achieve a desired 
                                         probability of detecting a difference in incidence (with the correct sign)."),
                                       p(HTML("")),
-                                      # p("Contributors:"),
-                                      # tags$ul(
-                                      #   tags$li("Eduard Grebe"),
-                                      #   tags$li("Stefano Ongarello"),
-                                      #   tags$li("Cari van Schalkwyk"),
-                                      #   tags$li("Alex Welte"),
-                                      #   tags$li("Lamin Juwara")
-                                      # ),
+                                      p("Contributors:"),
+                                      tags$ul(
+                                        tags$li("Lamin Juwara"),
+                                        tags$li("Eduard Grebe"),
+                                        tags$li("Stefano Ongarello"),
+                                        tags$li("Cari van Schalkwyk"),
+                                        tags$li("Alex Welte")
+
+                                      ),
                              p(em("Built using", a(strong("inctools"), href = "https://cran.r-project.org/web/packages/inctools/index.html", target = "_blank")))
                            )
                   )

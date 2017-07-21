@@ -26,9 +26,9 @@ shinyServer(function(input, output, session){
   data_prevalence <- reactive({ # for prevalence calculation
     validate(
       need(input$N>0,"Please enter a valid total population sample size"),
-      need(input$N>=input$N_H,"HIV-positive samples should be less than total sample size"),
-      need(input$N_H>=input$N_testR,"HIV-positive samples tested for recency should be less than HIV-positive samples among total sample size"),
-      need(input$N_testR>=input$N_R,"The number of recent HIV cases should be less than HIV-positive samples tested for recency"),
+      need(input$N>=input$N_H,"HIV-positive subjects should be less than total sample size"),
+      need(input$N_H>=input$N_testR,"HIV-positive subjects tested for recency should be less than HIV-positive subjects among total sample size"),
+      need(input$N_testR>=input$N_R,"The number of recent HIV cases should be less than HIV-positive subjects tested for recency"),
       need(input$RSE_FRR >= 0, 'Please provide a valid RSE for FRR'),
       need(input$RSE_FRR <= 100, 'Please provide a valid RSE for FRR'),
       need(!(input$RSE_FRR == "" ), 'Please provide a value for RSE_FRR'),
@@ -50,9 +50,9 @@ shinyServer(function(input, output, session){
   data_incidence <- reactive({ # for incidence calculiation
     validate(
       need(input$N>0,"Please enter a valid total population sample size"),
-      need(input$N>=input$N_H,"HIV-positive samples should be less than total sample size"),
-      need(input$N_H>=input$N_testR,"HIV-positive samples tested for recency should be less than HIV-positive samples among total sample size"),
-      need(input$N_testR>=input$N_R,"The number of recent HIV cases should be less than HIV-positive samples tested for recency"),
+      need(input$N>=input$N_H,"HIV-positive subjects should be less than total sample size"),
+      need(input$N_H>=input$N_testR,"HIV-positive subjects tested for recency should be less than HIV-positive subjects among total sample size"),
+      need(input$N_testR>=input$N_R,"The number of recent HIV cases should be less than HIV-positive subjects tested for recency"),
       need(input$N_R>=0,"Please enter a valid number for recent HIV cases"),
       need(input$RSE_FRR >= 0, 'Please provide a valid RSE for FRR'),
       need(input$RSE_FRR <= 100, 'Please provide a valid RSE for FRR'),
@@ -78,9 +78,9 @@ shinyServer(function(input, output, session){
   data_risk <- reactive({ # for risk of infection calculiation
     validate(
       need(input$N>0,"Please enter a valid total population sample size"),
-      need(input$N>=input$N_H,"HIV-positive samples should be less than total sample size"),
-      need(input$N_H>=input$N_testR,"HIV-positive samples tested for recency should be less than HIV-positive samples among total sample size"),
-      need(input$N_testR>=input$N_R,"The number of recent HIV cases should be less than HIV-positive samples tested for recency"),
+      need(input$N>=input$N_H,"HIV-positive subjects should be less than total sample size"),
+      need(input$N_H>=input$N_testR,"HIV-positive subjects tested for recency should be less than HIV-positive subjects among total sample size"),
+      need(input$N_testR>=input$N_R,"The number of recent HIV cases should be less than HIV-positive subjects tested for recency"),
       need(input$RSE_FRR >= 0, 'Please provide a valid RSE for FRR'),
       need(input$RSE_FRR <= 100, 'Please provide a valid RSE for FRR'),
       need(!(input$RSE_FRR == "" ), 'Please provide a value for RSE_FRR'),
@@ -103,6 +103,11 @@ shinyServer(function(input, output, session){
   })
   
   data_pie<-reactive({
+    validate(
+      need(input$N>0,""),
+      need(input$N>=input$N_H,""),
+      need(input$N_H>=input$N_testR,""),
+      need(input$N_testR>=input$N_R,""))
     Sample.Count<-c((input$N-input$N_H),input$N_R,
          (input$N_H-input$N_R),(input$N_H-input$N_testR))
     piepercent<-paste(round(100*Sample.Count/sum(Sample.Count),1),sep = "","%") 
@@ -112,12 +117,11 @@ shinyServer(function(input, output, session){
     color<-c("blue","orange","yellow","violet")
     pie(x = Sample.Count,labels = piepercent, col = color,
                          main = "Sample Counts")
-    options(error = NULL)
+    #options(error = NULL)
     legend("bottomleft",legend = label,cex = 1.0,fill = color)
   })
   
 # Output value  
-   
 
   # Produce an output table value.
   output$tab1 <- renderTable({

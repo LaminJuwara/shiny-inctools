@@ -21,9 +21,12 @@ shinyUI(fluidPage(
   sidebarLayout(
     sidebarPanel(
       fluidPage(
-        fluidRow(column(6, downloadButton('downloadData', 'Download table'))),
         fluidRow(
-                 column(6, downloadButton('downloadPlot', 'Save plot')))
+          # column(6, downloadButton('downloadPlot', 'Save Plot')),
+          column(6, downloadButton('downloadData', 'Download Table'))
+                 ),
+        fluidRow(
+                 column(6, downloadButton('downloadPlot', 'Save Plot')))
       ),
       hr(),
       fluidPage(
@@ -36,7 +39,6 @@ shinyUI(fluidPage(
                                     step = 100, animate = FALSE)
         ))
       ),
-
       # fluid page for the assay parameters
       #hr(),
       fluidPage(
@@ -130,7 +132,15 @@ shinyUI(fluidPage(
                               label = h3("RSE required for incidence estimate"),
                               value = .25, min = 0, max = 0.8,
                               step = 0.01))
-        ))
+        ),
+        fluidRow(
+          column(12,
+                 numericInput("RSE_infSS",
+                             label = h3("RSE of the incidence estimate at infinite sample size"),
+                             value = 0.0761, min = 0, max = 1,
+                             step = 0.0001))
+        )
+        )
       ),
     mainPanel(
       img(src='SACEMA_logo.jpg', align = "right", height = "75px"),
