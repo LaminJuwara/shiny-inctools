@@ -20,90 +20,93 @@ shinyUI(fluidPage(
   br(),
   sidebarLayout(
     sidebarPanel(
-      fluidPage(
-        fluidRow(column(12, downloadButton('downloadData', 'Download Estimates'))),
-
-      hr(),
-      fluidPage(
+      wellPanel(
+        fluidPage(
+        fluidRow(column(12, 
+                        downloadButton('downloadData', 'Download Estimates')))
+      )),
+      wellPanel(
+        fluidPage(
         h3("Sample Counts"),
         fluidRow(column(12,
                         numericInput("N", 
-                                    label = "Total Sample Size",
-                                    value = 5000, 
-                                    step = 1)
+                                     label = "Total Sample Size",
+                                     value = 5000, 
+                                     step = 1)
         )),
         fluidRow(
-        column(12,
-               numericInput("N_H", 
-                           label = "Number of HIV positive among total",
-                           # min = 0,
-                           # max = "input.N",
-                           value = 1000, 
-                           step = 1)
-        )
+          column(12,
+                 numericInput("N_H", 
+                              label = "Number of HIV positive among total",
+                              # min = 0,
+                              # max = "input.N",
+                              value = 1000, 
+                              step = 1)
+          )
         ),
         fluidRow(column(12,
                         numericInput("N_testR", 
-                                    label = "HIV positives tested for recency",
-                                    # min = 0,
-                                    # max = "input.N_H",
-                                    value = 1000, 
-                                    step = 1)
+                                     label = "HIV positives tested for recency",
+                                     # min = 0,
+                                     # max = "input.N_H",
+                                     value = 1000, 
+                                     step = 1)
         )),
         fluidRow(
-        column(12,
-               numericInput("N_R", 
-                           label = "Number of recent cases",
-                           # min = 0,
-                           # max = "input.N_testR",
-                           value = 50, 
-                           step = 1 )
+          column(12,
+                 numericInput("N_R", 
+                              label = "Number of recent cases",
+                              # min = 0,
+                              # max = "input.N_testR",
+                              value = 50, 
+                              step = 1 )
+          )
         )
-        )
-      ),
-
-      # fluid page for the assay parameters
-      #hr(),
-      fluidPage(
-        h3("Assay Parameters"),
-        
-        fluidRow(
-          column(6,
-                 numericInput("MDRI",
-                             label = h5("MDRI estimate (days)"),
-                             step = 1,
-                             value = 210),
-                 numericInput("FRR",
-                             label = h5("FRR estimate (%)"),
-                             min = 0,
-                             max = 100,
-                             step = 0.1,
-                             value = 0.5)),
-          column(6,
-                 numericInput("RSE_MDRI",
-                                label = h5("RSE of MDRI estimate (%)"),
-                              min = 0,
-                              max = 100,
-                                value = 5,
-                                step = 0.1),
-                 numericInput("RSE_FRR",
-                              label = h5("RSE of FRR estimate (%) "),
-                              min = 0,
-                              max = 100,
-                              value = 19,
-                              step = 0.1)),
-          column(10,
-                 numericInput("BigT",
-                              label = h5("Cut-off time T (days)"),
-                              value = 700,
-                              step = 1))
-                 )
-        
-      ),
-
-      #Design Effect parameters
-      #hr(),
-      fluidPage(
+      )),
+      wellPanel(
+        # fluid page for the assay parameters
+        fluidPage(
+          h3("Assay Parameters"),
+          fluidRow(
+            column(6,
+                   numericInput("MDRI",
+                                label = h5("MDRI estimate (days)"),
+                                step = 1,
+                                value = 210)),
+            column(6,
+                   numericInput("FRR",
+                                label = h5("FRR estimate (%)"),
+                                min = 0,
+                                max = 100,
+                                step = 0.1,
+                                value = 0.5))),
+          fluidRow(
+                   column(6,
+                          numericInput("RSE_MDRI",
+                                       label = h5("RSE of MDRI estimate (%)"),
+                                       min = 0,
+                                       max = 100,
+                                       value = 5,
+                                       step = 0.1)),
+                   column(6,
+                          numericInput("RSE_FRR",
+                                       label = h5("RSE of FRR estimate (%) "),
+                                       min = 0,
+                                       max = 100,
+                                       value = 19,
+                                       step = 0.1))),
+          fluidRow(
+            column(10,
+                   numericInput("BigT",
+                                label = h5("Cut-off time T (days)"),
+                                value = 700,
+                                step = 1))
+          )
+          
+        )),
+      wellPanel(
+        fluidPage(
+        #Design Effect parameters
         h3("Design Effect Parameters"),
         fluidRow(
           column(6,
@@ -116,17 +119,42 @@ shinyUI(fluidPage(
                               label = h5("Design effect for Recent infection prevalence among positives "),
                               value = 1,
                               step = 0.1)
-                 ))
-        ))
-    )
-      ,
+          ))
+      ))
+      ),
     mainPanel(
-      img(src='SACEMA_logo.jpg', align = "right", height = "75px"),
-      #img(src='mcgill.png', align = "right", height = "40px"),
-      br(),
+      fluidRow(
+        column(6,
+               img(src='SACEMA_logo.jpg', align = "left", height = "75px")
+               #img(src='mcgill.png', align = "right", height = "40px"),
+        ),
+        column(6,
+               tabsetPanel(type = "tabs",
+                           tabPanel("Hide About"),
+                           tabPanel("About", value='tab4_val', id = 'tab4',
+                                    wellPanel( p(""),
+                                               p(HTML("Calculates the minimum sample size required for a desired relative 
+                                                      standard error (RSE) of the incidence estimat given assay characteristics,
+                                                      reference epidemic state, design effects and recency test coverage.")),
+                                               p("Contributors:"),
+                                               tags$ul(
+                                                 tags$li("Lamin Juwara"),
+                                                 tags$li("Eduard Grebe"),
+                                                 tags$li("Stefano Ongarello"),
+                                                 tags$li("Cari van Schalkwyk"),
+                                                 tags$li("Alex Welte")
+                                               ),
+                                               p(em("Built using", a(strong("inctools"), href = "https://cran.r-project.org/web/packages/inctools/index.html", target = "_blank")))
+                                    )
+                           )
+               )
+               ) ),
+      #fluidRow(),
+
       #plotOutput("plot")
+      plotOutput("plot1"),
       tabsetPanel(type = "tabs",
-                  tabPanel("Estimated Prevalence", tableOutput("tab1"), plotOutput("plot1"),
+                  tabPanel("Estimated Prevalence", tableOutput("tab1"), 
                            br(),
                            p(""),
                            p(strong('Definition of Parameters')),
@@ -149,22 +177,8 @@ shinyUI(fluidPage(
                            p(strong('Definition of Parameters')),
                            br("ARI: Annual Risk of Infection"),
                            br("ARI.CI.low: Lower confidence limit of Annual Risk of Infection"),
-                           br("ARI.CI.up: Upper confidence limit of Annual Risk of Infection")),
-                  tabPanel("About", value='tab4_val', id = 'tab4',
-                           wellPanel( p("Calculates the point estimates and confidence intervals for prevalence,
-                                        incidence and annual risk of infection."),
-                                      p(HTML("")),
-                                      p("Contributors:"),
-                                      tags$ul(
-                                        tags$li("Eduard Grebe"),
-                                        tags$li("Lamin Juwara"),
-                                        tags$li("Stefano Ongarello"),
-                                        tags$li("Cari van Schalkwyk"),
-                                        tags$li("Alex Welte")
-                                      ),
-                                      p(em("Built using", a(strong("inctools"), href = "https://cran.r-project.org/web/packages/inctools/index.html", target = "_blank")))
-                           )
-                  )
+                           br("ARI.CI.up: Upper confidence limit of Annual Risk of Infection"))
+                  
       )
     )
   )
