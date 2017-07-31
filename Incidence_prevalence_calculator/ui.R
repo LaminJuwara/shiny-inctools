@@ -124,13 +124,14 @@ shinyUI(fluidPage(
       ),
     mainPanel(
       fluidRow(
-        column(6,
-               img(src='SACEMA_logo.jpg', align = "left", height = "75px")
+        column(12,
+               img(src='SACEMA_logo.jpg', align = "right", height = "75px")
                #img(src='mcgill.png', align = "right", height = "40px"),
-        ),
-        column(6,
+        )),
+      fluidRow(
+       # column(6,
                tabsetPanel(type = "tabs",
-                           tabPanel("Hide About"),
+                           tabPanel("Hide"),
                            tabPanel("About", value='tab4_val', id = 'tab4',
                                     wellPanel( p(""),
                                                p(HTML("Calculates the minimum sample size required for a desired relative 
@@ -148,7 +149,8 @@ shinyUI(fluidPage(
                                     )
                            )
                )
-               ) ),
+           #    ) 
+        ),
       #fluidRow(),
 
       #plotOutput("plot")

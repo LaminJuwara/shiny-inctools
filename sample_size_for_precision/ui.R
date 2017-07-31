@@ -42,7 +42,6 @@ shinyUI(fluidPage(
       )),
       
       # fluid page for the assay parameters
-      #hr(),
       wellPanel(fluidPage(
         
         h3("Assay Parameters"),
@@ -106,18 +105,19 @@ shinyUI(fluidPage(
       ),
     mainPanel(
       fluidRow(
-        column(6,
-               img(src='SACEMA_logo.jpg', align = "left", height = "75px")
+        column(12,
+               img(src='SACEMA_logo.jpg', align = "right", height = "75px")
                #img(src='mcgill.png', align = "right", height = "40px"),
-               ),
-        column(6,
-               tabsetPanel(type = "tabs",
-                           tabPanel("Hide About"),
-                           tabPanel("About", value='tab4_val', id = 'tab4',
-                                    wellPanel( p(""),
-                                               p(HTML("Calculates the minimum sample size required for a desired relative 
-                                                      standard error (RSE) of the incidence estimat given assay characteristics,
-                                                      reference epidemic state, design effects and recency test coverage.")),
+        )),
+      fluidRow(
+        # column(6,
+        tabsetPanel(type = "tabs",
+                    tabPanel("Hide"),
+                    tabPanel("About", value='tab4_val', id = 'tab4',
+                             wellPanel( p(""),
+                                        p(HTML("Calculates the minimum sample size required for a desired relative 
+                                               standard error (RSE) of the incidence estimat given assay characteristics,
+                                               reference epidemic state, design effects and recency test coverage.")),
                                                p("Contributors:"),
                                                tags$ul(
                                                  tags$li("Lamin Juwara"),
@@ -130,15 +130,12 @@ shinyUI(fluidPage(
                                     )
                            )
                )
-               )
-        
-        
-      ),
+           #    ) 
+        ),
+      #fluidRow(),
       fluidRow(
         column(6,
                wellPanel(# starting a new fluid page
-                 
-                 #hr(),
                  fluidPage(
                    h3("Survey Parameters"),
                    fluidRow(
@@ -166,7 +163,6 @@ shinyUI(fluidPage(
                    )))),
         column(6,
                wellPanel(#Design Effect parameters
-                 #hr(),
                  fluidPage(
                    h3("Design Effect Parameters"),
                    fluidRow(

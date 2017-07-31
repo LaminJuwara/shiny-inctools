@@ -43,7 +43,7 @@ shinyUI(fluidPage(
             column(6,
                    conditionalPanel(
                      condition = "input.scenario_case != 3",
-                     sliderInput("MDRI",
+                     numericInput("MDRI",
                                  label = h5("MDRI estimate (days)"),
                                  min = 0,
                                  max = 720,
@@ -52,13 +52,13 @@ shinyUI(fluidPage(
                    ),
                    conditionalPanel(
                      condition = "input.scenario_case == 3",
-                     sliderInput("MDRI_1",
+                     numericInput("MDRI_1",
                                  label = h5("MDRI estimate for survey 1 (days)"),
                                  min = 0,
                                  max = 720,
                                  step = 1,
                                  value = 240),
-                     sliderInput("MDRI_2",
+                     numericInput("MDRI_2",
                                  label = h5("MDRI estimate for survey 2 (days)"),
                                  min = 0,
                                  max = 720,
@@ -134,20 +134,20 @@ shinyUI(fluidPage(
 
       ),
     mainPanel(
-      ##### A row of two inputs ##############################
       fluidRow(
-        column(6,
-               img(src='SACEMA_logo.jpg', align = "left", height = "75px")
+        column(12,
+               img(src='SACEMA_logo.jpg', align = "right", height = "75px")
                #img(src='mcgill.png', align = "right", height = "40px"),
-        ),
-        column(6,
-               tabsetPanel(type = "tabs",
-                           tabPanel("Hide About"),
-                           tabPanel("About", value='tab4_val', id = 'tab4',
-                                    wellPanel( p(""),
-                                               p(HTML("Calculates the minimum sample size required for a desired relative 
-                                                      standard error (RSE) of the incidence estimat given assay characteristics,
-                                                      reference epidemic state, design effects and recency test coverage.")),
+        )),
+      fluidRow(
+        # column(6,
+        tabsetPanel(type = "tabs",
+                    tabPanel("Hide"),
+                    tabPanel("About", value='tab4_val', id = 'tab4',
+                             wellPanel( p(""),
+                                        p(HTML("Calculates the minimum sample size required for a desired relative 
+                                               standard error (RSE) of the incidence estimat given assay characteristics,
+                                               reference epidemic state, design effects and recency test coverage.")),
                                                p("Contributors:"),
                                                tags$ul(
                                                  tags$li("Lamin Juwara"),
@@ -160,10 +160,9 @@ shinyUI(fluidPage(
                                     )
                            )
                )
-               )
-        
-        
-      ),
+           #    ) 
+        ),
+      #fluidRow(),
 fluidRow(
   column(6,
          wellPanel(fluidPage(
@@ -185,7 +184,8 @@ fluidRow(
          ))
          ),
   column(6,
-         wellPanel(#Design Effect parameters
+         wellPanel(
+           #Design Effect parameters
            fluidPage(
              h3("Design Effect Parameters"),
              fluidRow(
@@ -221,22 +221,7 @@ fluidRow(
                            br("PrevH1 (%): Prevalence (%) in survey 1"),
                            br("PrevH2 (%): Prevalence (%) in survey 2"),
                            br("ss: Minimal number of subjects required"))
-                  # tabPanel("About", value='tab4_val', id = 'tab4',
-                  #          wellPanel( p("Calculates the minimum sample size (common in two surveys) requited to achieve a desired 
-                  #                       probability of detecting a difference in incidence (with the correct sign)."),
-                  #                     p(HTML("")),
-                  #                     p("Contributors:"),
-                  #                     tags$ul(
-                  #                       tags$li("Lamin Juwara"),
-                  #                       tags$li("Eduard Grebe"),
-                  #                       tags$li("Stefano Ongarello"),
-                  #                       tags$li("Cari van Schalkwyk"),
-                  #                       tags$li("Alex Welte")
-                  # 
-                  #                     ),
-                  #            p(em("Built using", a(strong("inctools"), href = "https://cran.r-project.org/web/packages/inctools/index.html", target = "_blank")))
-                  #          )
-                  # )
+                  
       )
     )
   )
