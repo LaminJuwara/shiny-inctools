@@ -16,7 +16,7 @@ library(shiny)
 shinyUI(fluidPage(
   
   # Application title
-  titlePanel(br(style = "color:red","Incidence Difference Calculator")),
+  titlePanel("Incidence Difference Calculator"),
   br(),
   sidebarLayout(
     sidebarPanel(
@@ -32,257 +32,239 @@ shinyUI(fluidPage(
                         selected = 2)
         )
         ),
-        #wellPanel(
+        wellPanel(fluidRow(
           conditionalPanel(
             condition = "input.survey_number == 2",
-              column(12,
-                     radioButtons("case", label = h3("Scenario Type:"),
-                                  c(" Same MDRI, same FRR estimates in the two surveys" = 1,
-                                    " Same MDRI, but different FRR estimates in the two surveys" = 2,
-                                    " Different MDRI and FRR estimates in the two surveys" = 3)),
-                     selected = 3)
+            column(12,
+                   radioButtons("case", label = h3("Scenario Type:"),
+                                c(" Same MDRI, same FRR estimates in the two surveys" = 1,
+                                  " Same MDRI, but different FRR estimates in the two surveys" = 2,
+                                  " Different MDRI and FRR estimates in the two surveys" = 3)),
+                   selected = 3)
           ),
           conditionalPanel(
             condition = "input.survey_number == 3",
             
-              column(12,
-                            radioButtons("case", label = h3("Scenario Type:"),
-                                         c("Independent MDRI and FRR estimates between surveys" = 3)),
-                            selected = 3)
-             
-            ),
-        hr(),
-        hr(),
-        p(""),
-        hr(),
-        fluidRow(
-          column(12,
-                 img(src='SACEMA_logo.jpg', align = "center", height = "75px")
-                 #img(src='mcgill.png', align = "right", height = "40px"),
-          ))
-        )
+            column(12,
+                   radioButtons("case", label = h3("Scenario Type:"),
+                                c("Independent MDRI and FRR estimates between all surveys" = 3)),
+                   selected = 3)
+          )
+        )),
+        wellPanel(
+          fluidPage(
+            h3("Survey Parameters"),
+            #wellPanel(
+              fluidRow(
+  
+                column(6, 
+                       numericInput("PrevH_1", label = h5("Prevalence of HIV infection in survey 1 (%)"), value = 20, step = 0.1, min=0, max = 100),
+                       numericInput("PrevR_1", label = h5("Prevalence of recent infections among positives in survey 1 (%)"), value = 10, step = 0.1, min=0, max = 100)
+                ),
+                column(6,
+                       numericInput("RSE_PrevH_1", label = h5("RSE of Prevalence HIV infection in survey 1 (%)"), value = 2.8, step = 0.1, min=0, max = 100),
+                       numericInput("RSE_PrevR_1", label = h5("RSE of Prevalence of recent infections among positives 1 (%)"), value = 9.8, step = 0.1, min=0, max = 100))
+             # )
+              ),
+           # wellPanel(
+              fluidRow(
+                
+                
+                column(6, 
+                       numericInput("PrevH_2", label = h5("Prevalence of HIV infection in survey 2 (%)"), value = 21, step = 0.1, min=0, max = 100),
+                       numericInput("PrevR_2", label = h5("Prevalence of recent infections among positives in survey 2 (%)"), value = 13, step = 0.1, min=0, max = 100)
+                ),
+                column(6, 
+                       numericInput("RSE_PrevH_2", label = h5("RSE of Prevalence HIV infection in survey 2 (%)"), value = 3, step = 0.1, min=0, max = 100),
+                       numericInput("RSE_PrevR_2", label = h5("RSE of Prevalence of recent infections among positives 2 (%)"), value = 9.5, step = 0.1, min=0, max = 100))
+             # )
+              ),
+            #wellPanel(
+              fluidRow(
+                conditionalPanel(
+                  condition = "input.survey_number != 2",
+                  column(6, 
+                         numericInput("PrevH_3", label = h5("Prevalence of HIV infection in survey 3 (%)"), value = 18, step = 0.1, min=0, max = 100),
+                         numericInput("PrevR_3", label = h5("Prevalence of recent infections among positives in survey 3 (%)"), value = 12, step = 0.1, min=0, max = 100)
+                  ),
+                  column(6, 
+                         numericInput("RSE_PrevH_3", label = h5("RSE of Prevalence HIV infection in survey 3 (%)"), value = 2.2, step = 0.1, min=0, max = 100),
+                         numericInput("RSE_PrevR_3", label = h5("RSE of Prevalence of recent infections among positives 3 (%)"), value = 5, step = 0.1, min=0, max = 100))
+                )
+              )
+           # )
+            )
+        ),
+       wellPanel(
+          # fluid page for the assay parameters
+          fluidPage(
+            h3("Assay Parameters"),
+           # wellPanel(
+              fluidRow(
+                column(6,
+                       conditionalPanel(
+                         condition = "input.case != 3 & input.survey_number != 3",
+                         numericInput("MDRI",
+                                      label = h5("MDRI estimate (days)"),
+                                      min = 0,
+                                      max = 720,
+                                      step = 1,
+                                      value = 240)
+                       ),
+                       conditionalPanel(
+                         condition = "input.case == 3 | input.survey_number == 3",
+                         numericInput("MDRI_1",
+                                      label = h5("MDRI estimate for survey 1 (days)"),
+                                      min = 0,
+                                      max = 720,
+                                      step = 1,
+                                      value = 240)
+                       ),
+                       conditionalPanel(
+                         condition = "input.case == 1 & input.survey_number != 3",
+                         numericInput("FRR",
+                                      label = h5("FRR estimate (%)"),
+                                      min = 0,
+                                      max = 100,
+                                      step = 0.1,
+                                      value = 1)
+                       ),
+                       conditionalPanel(
+                         condition = "input.case != 1 | input.survey_number == 3",
+                         numericInput("FRR_1",
+                                      label = h5("FRR estimate for survey 1 (%)"),
+                                      min = 0,
+                                      max = 100,
+                                      step = 0.1,
+                                      value = 1)
+                       )
+                ),
+                column(6,
+                       conditionalPanel(
+                         condition = "input.case != 3 & input.survey_number != 3",
+                         numericInput("RSE_MDRI", label = h5("RSE of MDRI estimate (%)"), value = 5, step = 0.1)
+                       ),
+                       conditionalPanel(
+                         condition = "input.case == 3 | input.survey_number == 3",
+                         numericInput("RSE_MDRI_1", label = h5("RSE of MDRI estimate for survey 1 (%)"), value = 5, step = 0.1)
+                       ),
+                       conditionalPanel(
+                         condition = "input.case == 1 & input.survey_number != 3",
+                         numericInput("RSE_FRR", label = h5("RSE of FRR estimate (%)"), value = 20, step = 0.1)
+                       ),
+                       conditionalPanel(
+                         condition = "input.case != 1 | input.survey_number == 3",
+                         numericInput("RSE_FRR_1", label = h5("RSE of FRR estimate for survey 1 (%)"), value = 20, step = 0.1)
+                       )
+                )
+              #  )
+              ),
+           # wellPanel(
+              fluidRow(
+                column(6,
+                       conditionalPanel(
+                         condition = "input.case == 3 | input.survey_number == 3",
+                         numericInput("MDRI_2",
+                                      label = h5("MDRI estimate for survey 2 (days)"),
+                                      min = 0,
+                                      max = 720,
+                                      step = 1,
+                                      value = 240)
+                       ),
+                       conditionalPanel(
+                         condition = "input.case != 1 | input.survey_number == 3",
+                         numericInput("FRR_2",
+                                      label = h5("FRR estimate for survey 2 (%)"),
+                                      min = 0,
+                                      max = 100,
+                                      step = 0.1,
+                                      value = 1)
+                       )
+                ),
+                column(6,
+                       conditionalPanel(
+                         condition = "input.case == 3 | input.survey_number == 3",
+                         numericInput("RSE_MDRI_2", label = h5("RSE of MDRI estimate for survey 2(%)"), value = 5, step = 0.1)
+                       ),
+                       conditionalPanel(
+                         condition = "input.case != 1 | input.survey_number == 3",
+                         numericInput("RSE_FRR_2", label = h5("RSE of FRR estimate for survey 2 (%)"), value = 20, step = 0.1)
+                       )
+                )
+               # )
+              ),
+           # wellPanel(
+              fluidRow(
+                conditionalPanel(
+                  condition = "input.survey_number != 2",
+                  column(6,
+                         numericInput("MDRI_3",
+                                      label = h5("MDRI estimate of survey 3 (days)"),
+                                      step = 1,
+                                      value = 180 ),
+                         numericInput("FRR_3",
+                                      label = h5("FRR estimate of survey 3 (%)"),
+                                      min = 0,
+                                      max = 100,
+                                      step = 0.1,
+                                      value = 2 )
+                  ),
+                  column(6,
+                         numericInput("RSE_MDRI_3", label = h5("RSE of MDRI estimate of survey 3 (%)"), value = 6, step = 0.1),
+                         numericInput("RSE_FRR_3", label = h5("RSE of FRR estimate of survey 3 (%)"), value = 10, step = 0.1)
+                  )
+                )
+            #  )
+              ),
+           # wellPanel(
+              fluidRow(
+              column(10,numericInput("BigT", label = h5("Cut-off time T (days)"), value = 730, step = 10)
+              )))
+       )
+          )
+      #  )
     ),
     mainPanel(
-
       fluidRow(
-        # column(6,
+      column(12,
+             img(src='SACEMA_logo.jpg', align = "right", height = "75px")
+             #img(src='mcgill.png', align = "right", height = "40px"),
+      )),
+      fluidRow(
         tabsetPanel(type = "tabs",
-                    tabPanel("Hide"),
-                    tabPanel("User Guide",
-                             includeHTML("ABIE_v3_Incidence_Difference_Calculator.html")
-                             ),
+                    tabPanel("Incidence Difference", tableOutput("tab"),
+                             p(""),
+                             p(style = "color:black", strong('Parameter Definitions')),
+                             br(style = "color:grey","compare: surveys compared"),
+                             br(style = "color:grey","Diff: point estimate of the estimated difference (p.a)"),
+                             br(style = "color:grey","CI.Diff.low: lower limit of confidence interval "),
+                             br(style = "color:grey","CI.Diff.up: Upper limit of confidence interval"),
+                             br(style = "color:grey","RSE.Diff: RSE of difference estimate"),
+                             br(style = "color:grey","RSE.Diff.inf.SS: RSE of the difference estimate at the infinite sample size"),
+                             br(style = "color:grey","p.value: P-value for incidence estimate "),
+                             br(style = "color:grey","p.value.inf.SS: P-value at infinite sample size"),
+                             
+                             br(),
+                             br()),
+                    tabPanel("User Guide", value='tab3_val', id = 'tab3',
+                             p("")),
                     tabPanel("About", value='tab4_val', id = 'tab4',
                              wellPanel( p(""),
                                         p(HTML("Calculates the minimum sample size required for a desired relative 
                                                standard error (RSE) of the incidence estimat given assay characteristics,
                                                reference epidemic state, design effects and recency test coverage.")),
-                                               p("Contributors:"),
-                                               tags$ul(
-                                                 tags$li("Lamin Juwara"),
-                                                 tags$li("Eduard Grebe"),
-                                                 tags$li("Stefano Ongarello"),
-                                                 tags$li("Cari van Schalkwyk"),
-                                                 tags$li("Alex Welte")
-                                               ),
-                                               p(em("Built using", a(strong("inctools"), href = "https://cran.r-project.org/web/packages/inctools/index.html", target = "_blank")))
-                                    )
-                           )
-               )
-           #    ) 
-        ),
-      #fluidRow(),
-      fluidRow(
-        column(6,
-              wellPanel(
-               fluidPage(
-                 h3("Survey Parameters"),
-                 wellPanel(
-                 fluidRow(
-                   
-                   
-                   column(6, 
-                          numericInput("PrevH_1", label = h5("Prevalence of HIV infection in survey 1 (%)"), value = 20, step = 0.1, min=0, max = 100),
-                          numericInput("PrevR_1", label = h5("Prevalence of recent infections among positives in survey 1 (%)"), value = 10, step = 0.1, min=0, max = 100)
-                          ),
-                   column(6,
-                          numericInput("RSE_PrevH_1", label = h5("RSE of Prevalence HIV infection in survey 1 (%)"), value = 2.8, step = 0.1, min=0, max = 100),
-                          numericInput("RSE_PrevR_1", label = h5("RSE of Prevalence of recent infections among positives 1 (%)"), value = 9.8, step = 0.1, min=0, max = 100))
-                 )),
-                 wellPanel(
-                 fluidRow(
-                   
-                   
-                   column(6, 
-                          numericInput("PrevH_2", label = h5("Prevalence of HIV infection in survey 2 (%)"), value = 21, step = 0.1, min=0, max = 100),
-                          numericInput("PrevR_2", label = h5("Prevalence of recent infections among positives in survey 2 (%)"), value = 13, step = 0.1, min=0, max = 100)
-                          ),
-                   column(6, 
-                          numericInput("RSE_PrevH_2", label = h5("RSE of Prevalence HIV infection in survey 2 (%)"), value = 3, step = 0.1, min=0, max = 100),
-                          numericInput("RSE_PrevR_2", label = h5("RSE of Prevalence of recent infections among positives 2 (%)"), value = 9.5, step = 0.1, min=0, max = 100))
-                 )),
-                 wellPanel(
-                 fluidRow(
-                   conditionalPanel(
-                     condition = "input.survey_number != 2",
-                     column(6, 
-                            numericInput("PrevH_3", label = h5("Prevalence of HIV infection in survey 3 (%)"), value = 18, step = 0.1, min=0, max = 100),
-                            numericInput("PrevR_3", label = h5("Prevalence of recent infections among positives in survey 3 (%)"), value = 12, step = 0.1, min=0, max = 100)
-                            ),
-                     column(6, 
-                            numericInput("RSE_PrevH_3", label = h5("RSE of Prevalence HIV infection in survey 3 (%)"), value = 2.2, step = 0.1, min=0, max = 100),
-                            numericInput("RSE_PrevR_3", label = h5("RSE of Prevalence of recent infections among positives 3 (%)"), value = 5, step = 0.1, min=0, max = 100))
-                     
-                   )
-                   
-                   
-                   
-                 )
-               ))
-              )
-               ),
-        column(6,
-               wellPanel(
-               # fluid page for the assay parameters
-               fluidPage(
-                 h3("Assay Parameters"),
-                 wellPanel(
-                   fluidRow(
-                     column(6,
-                            conditionalPanel(
-                              condition = "input.case != 3 & input.survey_number != 3",
-                              numericInput("MDRI",
-                                           label = h5("MDRI estimate (days)"),
-                                           min = 0,
-                                           max = 720,
-                                           step = 1,
-                                           value = 240)
-                            ),
-                            conditionalPanel(
-                              condition = "input.case == 3 | input.survey_number == 3",
-                              numericInput("MDRI_1",
-                                           label = h5("MDRI estimate for survey 1 (days)"),
-                                           min = 0,
-                                           max = 720,
-                                           step = 1,
-                                           value = 240)
-                            ),
-                            conditionalPanel(
-                              condition = "input.case == 1 & input.survey_number != 3",
-                              numericInput("FRR",
-                                           label = h5("FRR estimate (%)"),
-                                           min = 0,
-                                           max = 100,
-                                           step = 0.1,
-                                           value = 1)
-                            ),
-                            conditionalPanel(
-                              condition = "input.case != 1 | input.survey_number == 3",
-                              numericInput("FRR_1",
-                                           label = h5("FRR estimate for survey 1 (%)"),
-                                           min = 0,
-                                           max = 100,
-                                           step = 0.1,
-                                           value = 1)
-                            )
-                     ),
-                     column(6,
-                            conditionalPanel(
-                              condition = "input.case != 3 & input.survey_number != 3",
-                              numericInput("RSE_MDRI", label = h5("RSE of MDRI estimate (%)"), value = 5, step = 0.1)
-                            ),
-                            conditionalPanel(
-                              condition = "input.case == 3 | input.survey_number == 3",
-                              numericInput("RSE_MDRI_1", label = h5("RSE of MDRI estimate for survey 1 (%)"), value = 5, step = 0.1)
-                            ),
-                            conditionalPanel(
-                              condition = "input.case == 1 & input.survey_number != 3",
-                              numericInput("RSE_FRR", label = h5("RSE of FRR estimate (%)"), value = 20, step = 0.1)
-                            ),
-                            conditionalPanel(
-                              condition = "input.case != 1 | input.survey_number == 3",
-                              numericInput("RSE_FRR_1", label = h5("RSE of FRR estimate for survey 1 (%)"), value = 20, step = 0.1)
-                            )
-                     ))),
-                 wellPanel(
-                   fluidRow(
-                     column(6,
-                            conditionalPanel(
-                              condition = "input.case == 3 | input.survey_number == 3",
-                              numericInput("MDRI_2",
-                                           label = h5("MDRI estimate for survey 2 (days)"),
-                                           min = 0,
-                                           max = 720,
-                                           step = 1,
-                                           value = 240)
-                            ),
-                            conditionalPanel(
-                              condition = "input.case != 1 | input.survey_number == 3",
-                              numericInput("FRR_2",
-                                           label = h5("FRR estimate for survey 2 (%)"),
-                                           min = 0,
-                                           max = 100,
-                                           step = 0.1,
-                                           value = 1)
-                            )
-                     ),
-                     column(6,
-                            conditionalPanel(
-                              condition = "input.case == 3 | input.survey_number == 3",
-                              numericInput("RSE_MDRI_2", label = h5("RSE of MDRI estimate for survey 2(%)"), value = 5, step = 0.1)
-                            ),
-                            conditionalPanel(
-                              condition = "input.case != 1 | input.survey_number == 3",
-                              numericInput("RSE_FRR_2", label = h5("RSE of FRR estimate for survey 2 (%)"), value = 20, step = 0.1)
-                            )
-                     ))),
-                 wellPanel(
-                   fluidRow(
-                     conditionalPanel(
-                       condition = "input.survey_number != 2",
-                       column(6,
-                              numericInput("MDRI_3",
-                                           label = h5("MDRI estimate of survey 3 (days)"),
-                                           step = 1,
-                                           value = 180 ),
-                              numericInput("FRR_3",
-                                           label = h5("FRR estimate of survey 3 (%)"),
-                                           min = 0,
-                                           max = 100,
-                                           step = 0.1,
-                                           value = 2 )
-                       ),
-                       column(6,
-                              numericInput("RSE_MDRI_3", label = h5("RSE of MDRI estimate of survey 3 (%)"), value = 6, step = 0.1),
-                              numericInput("RSE_FRR_3", label = h5("RSE of FRR estimate of survey 3 (%)"), value = 10, step = 0.1)
-                              
-                       )
-                       
-                     )
-                   )),
-                 wellPanel(fluidRow(
-                   column(10,numericInput("BigT", label = h5("Cut-off time T (days)"), value = 730, step = 10)
-                   )))
-               )
+                                        p("Contributors:"),
+                                        tags$ul(
+                                          tags$li("Lamin Juwara"),
+                                          tags$li("Eduard Grebe"),
+                                          tags$li("Stefano Ongarello"),
+                                          tags$li("Cari van Schalkwyk"),
+                                          tags$li("Alex Welte")
+                                        ),
+                                        p(em("Built using", a(strong("inctools"), href = "https://cran.r-project.org/web/packages/inctools/index.html", target = "_blank")))
+                             )
+                    )
         )
-        )
-        ),
-      tabsetPanel(type = "tabs",
-                  tabPanel(strong("Incidence Difference"), tableOutput("tab"),
-  
-                           p(""),
-                           p(style = "color:black", strong('Parameter Definitions')),
-                           #p(strong('Parameter Definitions')),
-                           br(style = "color:grey","compare: surveys compared"),
-                           br(style = "color:grey","Diff: point estimate of the estimated difference (p.a)"),
-                           br(style = "color:grey","CI.Diff.low: lower limit of confidence interval "),
-                           br(style = "color:grey","CI.Diff.up: Upper limit of confidence interval"),
-                           br(style = "color:grey","RSE.Diff: RSE of difference estimate"),
-                           br(style = "color:grey","RSE.Diff.inf.SS: RSE of the difference estimate at the infinite sample size"),
-                           br(style = "color:grey","p.value: P-value for incidence estimate "),
-                           br(style = "color:grey","p.value.inf.SS: P-value at infinite sample size"),
-        
-                           br(),
-                           br())
       )
     )
   )

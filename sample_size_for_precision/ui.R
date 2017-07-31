@@ -83,7 +83,53 @@ shinyUI(fluidPage(
         )
         
       )),
-      
+      wellPanel(# starting a new fluid page
+        fluidPage(
+          h3("Survey Parameters"),
+          fluidRow(
+            column(6,
+                   numericInput("I", 
+                                label = h5("Reference Incidence (% p.a)"),
+                                min = 0,
+                                max = 100,
+                                value = 1.7,
+                                step = 0.1)),
+            column(6,
+                   numericInput("PrevH",
+                                label = h5("Reference prevalence (%)"),
+                                min = 0,
+                                max = 100,
+                                value = 10,
+                                step = 0.1))),
+          fluidRow(
+            column(9,
+                   sliderInput("CR", # the coverage rate probability
+                               label = h5("Coverage rate (%)"),
+                               min = 0,
+                               max = 100, 
+                               value = 50,
+                               step = 0.1)
+                   )
+          ))
+      ),
+      wellPanel(#Design Effect parameters
+        fluidPage(
+          h3("Design Effect Parameters"),
+          fluidRow(
+            column(6,
+                   numericInput("DE_H",
+                                label = h5("Design effect for HIV infection prevalence"),
+                                value = 0.9, 
+                                step = 0.1)),
+            column(6,
+                   numericInput("DE_R",
+                                label = h5("Design effect for Recent infection prevalence among positives"),
+                                value = 0.9,
+                                step = 0.1)
+            )
+          )
+        )),
+
       wellPanel( fluidPage(
         fluidRow(
           column(12,
@@ -109,78 +155,7 @@ shinyUI(fluidPage(
                img(src='SACEMA_logo.jpg', align = "right", height = "75px")
                #img(src='mcgill.png', align = "right", height = "40px"),
         )),
-      fluidRow(
-        # column(6,
-        tabsetPanel(type = "tabs",
-                    tabPanel("Hide"),
-                    tabPanel("About", value='tab4_val', id = 'tab4',
-                             wellPanel( p(""),
-                                        p(HTML("Calculates the minimum sample size required for a desired relative 
-                                               standard error (RSE) of the incidence estimat given assay characteristics,
-                                               reference epidemic state, design effects and recency test coverage.")),
-                                               p("Contributors:"),
-                                               tags$ul(
-                                                 tags$li("Lamin Juwara"),
-                                                 tags$li("Eduard Grebe"),
-                                                 tags$li("Stefano Ongarello"),
-                                                 tags$li("Cari van Schalkwyk"),
-                                                 tags$li("Alex Welte")
-                                               ),
-                                               p(em("Built using", a(strong("inctools"), href = "https://cran.r-project.org/web/packages/inctools/index.html", target = "_blank")))
-                                    )
-                           )
-               )
-           #    ) 
-        ),
-      #fluidRow(),
-      fluidRow(
-        column(6,
-               wellPanel(# starting a new fluid page
-                 fluidPage(
-                   h3("Survey Parameters"),
-                   fluidRow(
-                     column(6,
-                            numericInput("I", 
-                                         label = h5("Reference Incidence (% p.a)"),
-                                         min = 0,
-                                         max = 100,
-                                         value = 1.7,
-                                         step = 0.1)),
-                     column(6,
-                            numericInput("PrevH",
-                                         label = h5("Reference prevalence (%)"),
-                                         min = 0,
-                                         max = 100,
-                                         value = 10,
-                                         step = 0.1))),
-                   fluidRow(
-                     sliderInput("CR", # the coverage rate probability
-                                 label = h5("Coverage rate (%)"),
-                                 min = 0,
-                                 max = 100, 
-                                 value = 50,
-                                 step = 0.1)
-                   )))),
-        column(6,
-               wellPanel(#Design Effect parameters
-                 fluidPage(
-                   h3("Design Effect Parameters"),
-                   fluidRow(
-                     column(6,
-                            numericInput("DE_H",
-                                         label = "Design effect for HIV infection prevalence",
-                                         value = 0.9, 
-                                         step = 0.1)),
-                     column(6,
-                            numericInput("DE_R",
-                                         label = "Design effect for Recent infection prevalence among positives",
-                                         value = 0.9,
-                                         step = 0.1)
-                     )
-                   )
-                 )))
-      ),
-      
+
       #plotOutput("plot")
       tabsetPanel(type = "tabs",
                   tabPanel("Plot", plotOutput("plot", width = "100%", height = "600px")),
@@ -193,7 +168,25 @@ shinyUI(fluidPage(
                            br("MDRI: mean duration of recent infection in days "),
                            br("RSE_MDRI: Relative standard error of MDRI"),
                            br("FRR: False recent rate "),
-                           br("n:  The Sample Size"))
+                           br("n:  The Sample Size")),
+                  tabPanel("User Guide", value='tab3_val', id = 'tab3',
+                           p("")),
+                  tabPanel("About", value='tab4_val', id = 'tab4',
+                           wellPanel( p(""),
+                                      p(HTML("Calculates the minimum sample size required for a desired relative 
+                                               standard error (RSE) of the incidence estimat given assay characteristics,
+                                               reference epidemic state, design effects and recency test coverage.")),
+                                      p("Contributors:"),
+                                      tags$ul(
+                                        tags$li("Lamin Juwara"),
+                                        tags$li("Eduard Grebe"),
+                                        tags$li("Stefano Ongarello"),
+                                        tags$li("Cari van Schalkwyk"),
+                                        tags$li("Alex Welte")
+                                      ),
+                                      p(em("Built using", a(strong("inctools"), href = "https://cran.r-project.org/web/packages/inctools/index.html", target = "_blank")))
+                           )
+                  )
                   
       )
     )

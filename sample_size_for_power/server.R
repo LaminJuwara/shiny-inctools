@@ -257,9 +257,7 @@ shinyServer(function(input, output, session) {
       abline(v = data[which(round(data[,1],2)==input$statPower/100),"N"])
       print(plot)
       dev.off()
-      #write.csv(renameTable(format_table(df(), input$scenario_case)) , file)
-      # ggsave(file = file, plot = plot, width = 13, height = 9)
-      
+  
     }
   )
   

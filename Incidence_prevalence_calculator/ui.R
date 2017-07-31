@@ -22,7 +22,10 @@ shinyUI(fluidPage(
     sidebarPanel(
       wellPanel(
         fluidPage(
-        fluidRow(column(12, 
+          # fluidRow(
+          #   column(5, downloadButton('downloadData', 'Download Estimates')),
+          #   column(5, downloadButton('downloadPlot', 'Save Plot')))
+        fluidRow(column(12,
                         downloadButton('downloadData', 'Download Estimates')))
       )),
       wellPanel(
@@ -129,9 +132,14 @@ shinyUI(fluidPage(
                #img(src='mcgill.png', align = "right", height = "40px"),
         )),
       fluidRow(
-       # column(6,
                tabsetPanel(type = "tabs",
-                           tabPanel("Hide"),
+                           tabPanel("Plot", 
+                                    plotOutput("plot1")),
+                           tabPanel("User Guide", value='tab3_val', id = 'tab3',
+                                    wellPanel( p(""),
+                                               p(HTML("Calculates foo."))
+                                    )
+                           ),
                            tabPanel("About", value='tab4_val', id = 'tab4',
                                     wellPanel( p(""),
                                                p(HTML("Calculates the minimum sample size required for a desired relative 
@@ -149,12 +157,14 @@ shinyUI(fluidPage(
                                     )
                            )
                )
-           #    ) 
         ),
-      #fluidRow(),
 
-      #plotOutput("plot")
-      plotOutput("plot1"),
+      fluidRow(
+        br(),
+        p(""),
+        p(""),
+        h3("   Incidence/Prevalence Estimates"),
+        br()),
       tabsetPanel(type = "tabs",
                   tabPanel("Estimated Prevalence", tableOutput("tab1"), 
                            br(),

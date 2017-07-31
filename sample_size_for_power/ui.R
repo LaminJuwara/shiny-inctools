@@ -88,9 +88,7 @@ shinyUI(fluidPage(
                                  max = 100,
                                  step = 0.1,
                                  value = 1)
-                   ),
-                   
-                   numericInput("TIME", label = h5("Cut-off time T (days)"), value = 730, step = 10)
+                   )
             ),
             
             column(6,
@@ -110,7 +108,44 @@ shinyUI(fluidPage(
                      numericInput("frrhatcov_2", label = h5("RSE of FRR estimate for survey 2 (%)"), value = 20, step = 0.1))
                    
             )
-          ))),
+          ),
+          fluidRow(column(9,
+                          numericInput("TIME", label = h5("Cut-off time T (days)"), value = 730, step = 10)
+                          ))
+          )),
+      wellPanel(fluidPage(
+        h3("Survey Parameters"),
+        fluidRow(
+          column(6,
+                 numericInput("inc_1", label = h5("Incidence in survey 1 (%)"), value = 5, step = 0.1),
+                 numericInput("p_pos_1", label = h5("Prevalence in survey 1 (%)"), value = 15, step = 0.1),
+                 numericInput("rec_test_coverage_1", label = h5("Percentage of HIV positives tested for recency in survey 1 (%)"), value = 100, step = 1)
+                 
+          ),
+          
+          column(6,
+                 numericInput("inc_2", label = h5("Incidence in survey 2 (%)"), value = 2.5, step = 0.1),
+                 numericInput("p_pos_2", label = h5("Prevalence in survey 2 (%)"), value = 12, step = 0.1),
+                 numericInput("rec_test_coverage_2", label = h5("Percentage of HIV positives tested for recency in survey 2 (%)"), value = 100, step = 1)
+          )
+        )
+      )),
+      wellPanel(
+        #Design Effect parameters
+        fluidPage(
+          h3("Design Effect Parameters"),
+          fluidRow(
+            column(6,
+                   numericInput("DE_prev_1", label = h5("Infection prevalence in survey 1"), value = 1, step = 0.1),
+                   numericInput("DE_RgivenTested_1", label = h5("Recent infection prevalence among positives in survey 1"), value = 1, step = 0.1)),
+            column(6,
+                   numericInput("DE_prev_2", label = h5("Infection prevalence in survey 2"), value = 1, step = 0.1),
+                   numericInput("DE_RgivenTested_2", label = h5("Recent infection prevalence among positives in survey 2"), value = 1, step = 0.1))
+          )
+        )
+      ),
+
+               
       wellPanel(fluidPage(
         fluidRow(numericInput("alpha",
                               label = "Significance level (alpha)",
@@ -139,68 +174,6 @@ shinyUI(fluidPage(
                img(src='SACEMA_logo.jpg', align = "right", height = "75px")
                #img(src='mcgill.png', align = "right", height = "40px"),
         )),
-      fluidRow(
-        # column(6,
-        tabsetPanel(type = "tabs",
-                    tabPanel("Hide"),
-                    tabPanel("About", value='tab4_val', id = 'tab4',
-                             wellPanel( p(""),
-                                        p(HTML("Calculates the minimum sample size required for a desired relative 
-                                               standard error (RSE) of the incidence estimat given assay characteristics,
-                                               reference epidemic state, design effects and recency test coverage.")),
-                                               p("Contributors:"),
-                                               tags$ul(
-                                                 tags$li("Lamin Juwara"),
-                                                 tags$li("Eduard Grebe"),
-                                                 tags$li("Stefano Ongarello"),
-                                                 tags$li("Cari van Schalkwyk"),
-                                                 tags$li("Alex Welte")
-                                               ),
-                                               p(em("Built using", a(strong("inctools"), href = "https://cran.r-project.org/web/packages/inctools/index.html", target = "_blank")))
-                                    )
-                           )
-               )
-           #    ) 
-        ),
-      #fluidRow(),
-fluidRow(
-  column(6,
-         wellPanel(fluidPage(
-           h3("Survey Parameters"),
-           fluidRow(
-             column(6,
-                    numericInput("inc_1", label = h5("Incidence in survey 1 (%)"), value = 5, step = 0.1),
-                    numericInput("p_pos_1", label = h5("Prevalence in survey 1 (%)"), value = 15, step = 0.1),
-                    numericInput("rec_test_coverage_1", label = h5("Percentage of HIV positives tested for recency in survey 1 (%)"), value = 100, step = 1)
-                    
-             ),
-             
-             column(6,
-                    numericInput("inc_2", label = h5("Incidence in survey 2 (%)"), value = 2.5, step = 0.1),
-                    numericInput("p_pos_2", label = h5("Prevalence in survey 2 (%)"), value = 12, step = 0.1),
-                    numericInput("rec_test_coverage_2", label = h5("Percentage of HIV positives tested for recency in survey 2 (%)"), value = 100, step = 1)
-             )
-           )
-         ))
-         ),
-  column(6,
-         wellPanel(
-           #Design Effect parameters
-           fluidPage(
-             h3("Design Effect Parameters"),
-             fluidRow(
-               column(6,
-                      numericInput("DE_prev_1", label = h5("Infection prevalence in survey 1"), value = 1, step = 0.1),
-                      numericInput("DE_RgivenTested_1", label = h5("Recent infection prevalence among positives in survey 1"), value = 1, step = 0.1)),
-               column(6,
-                      numericInput("DE_prev_2", label = h5("Infection prevalence in survey 2"), value = 1, step = 0.1),
-                      numericInput("DE_RgivenTested_2", label = h5("Recent infection prevalence among positives in survey 2"), value = 1, step = 0.1))
-             )
-           )
-           )
-         )
-),
-      
       br(),
       #plotOutput("plot")
       tabsetPanel(type = "tabs",
@@ -220,8 +193,29 @@ fluidRow(
                            br("I2 (%): Incidence (%) in survey 2"),
                            br("PrevH1 (%): Prevalence (%) in survey 1"),
                            br("PrevH2 (%): Prevalence (%) in survey 2"),
-                           br("ss: Minimal number of subjects required"))
-                  
+                           br("ss: Minimal number of subjects required")),
+                  tabPanel("User Guide", value='tab3_val', id = 'tab3',
+                           wellPanel( p(""),
+                                      p(HTML("Calculates foo."))
+                                      )
+                  ),
+                  tabPanel("About", value='tab4_val', id = 'tab4',
+                           wellPanel( p(""),
+                                      p(HTML("Calculates the minimum sample size required for a desired relative 
+                                               standard error (RSE) of the incidence estimat given assay characteristics,
+                                               reference epidemic state, design effects and recency test coverage.")),
+                                      p("Contributors:"),
+                                      tags$ul(
+                                        tags$li("Lamin Juwara"),
+                                        tags$li("Eduard Grebe"),
+                                        tags$li("Stefano Ongarello"),
+                                        tags$li("Cari van Schalkwyk"),
+                                        tags$li("Alex Welte")
+                                      ),
+                                      p(em("Built using", a(strong("inctools"), href = "https://cran.r-project.org/web/packages/inctools/index.html", target = "_blank")))
+                           )
+                  )
+      
       )
     )
   )

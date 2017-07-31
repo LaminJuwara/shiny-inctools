@@ -150,7 +150,19 @@ shinyServer(function(input, output, session){
       write.csv(c(data_prevalence(),data_incidence(),data_risk()) , file)
     }
   )
-
+  # output$downloadPlot <- downloadHandler(
+  #   filename = function() {
+  #     paste("data-", Sys.Date(), ".jpeg", sep="")
+  #   },
+  #   content = function(file) {
+  #     jpeg(filename = file)
+  #     plot<- renderPlot({
+  #       data_pie()
+  #     })
+  #     print(plot)
+  #     #dev.off()
+  #   }
+  # )
  
 
 })
