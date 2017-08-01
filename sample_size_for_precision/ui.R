@@ -170,6 +170,7 @@ shinyUI(fluidPage(
                            br("FRR: False recent rate "),
                            br("n:  The Sample Size")),
                   tabPanel("User Guide", value='tab3_val', id = 'tab3',
+                           wellPanel(includeHTML("sample_size_calculator.html")),
                            p("")),
                   tabPanel("About", value='tab4_val', id = 'tab4',
                            wellPanel( p(""),

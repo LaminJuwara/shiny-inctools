@@ -131,40 +131,6 @@ shinyUI(fluidPage(
                img(src='SACEMA_logo.jpg', align = "right", height = "75px")
                #img(src='mcgill.png', align = "right", height = "40px"),
         )),
-      fluidRow(
-               tabsetPanel(type = "tabs",
-                           tabPanel("Plot", 
-                                    plotOutput("plot1")),
-                           tabPanel("User Guide", value='tab3_val', id = 'tab3',
-                                    wellPanel( p(""),
-                                               p(HTML("Calculates foo."))
-                                    )
-                           ),
-                           tabPanel("About", value='tab4_val', id = 'tab4',
-                                    wellPanel( p(""),
-                                               p(HTML("Calculates the minimum sample size required for a desired relative 
-                                                      standard error (RSE) of the incidence estimat given assay characteristics,
-                                                      reference epidemic state, design effects and recency test coverage.")),
-                                               p("Contributors:"),
-                                               tags$ul(
-                                                 tags$li("Lamin Juwara"),
-                                                 tags$li("Eduard Grebe"),
-                                                 tags$li("Stefano Ongarello"),
-                                                 tags$li("Cari van Schalkwyk"),
-                                                 tags$li("Alex Welte")
-                                               ),
-                                               p(em("Built using", a(strong("inctools"), href = "https://cran.r-project.org/web/packages/inctools/index.html", target = "_blank")))
-                                    )
-                           )
-               )
-        ),
-
-      fluidRow(
-        br(),
-        p(""),
-        p(""),
-        h3("   Incidence/Prevalence Estimates"),
-        br()),
       tabsetPanel(type = "tabs",
                   tabPanel("Estimated Prevalence", tableOutput("tab1"), 
                            br(),
@@ -174,7 +140,7 @@ shinyUI(fluidPage(
                            br("RSE_PrevH: Relative standard error of PrevH"),
                            br("PrevR: Prevalence of recency"),
                            br("RSE_PrevR: Relative standard error of PrevR")
-                           ),
+                  ),
                   tabPanel("Estimated Incidence", tableOutput("tab2"),
                            br(),
                            p(""),
@@ -189,9 +155,39 @@ shinyUI(fluidPage(
                            p(strong('Definition of Parameters')),
                            br("ARI: Annual Risk of Infection"),
                            br("ARI.CI.low: Lower confidence limit of Annual Risk of Infection"),
-                           br("ARI.CI.up: Upper confidence limit of Annual Risk of Infection"))
+                           br("ARI.CI.up: Upper confidence limit of Annual Risk of Infection")),
+                  tabPanel("User Guide", value='tab3_val', id = 'tab3',
+                           wellPanel( p(""),
+                                      wellPanel(includeHTML("Incidence_Prevalence_Calculator.html"))
+                           )
+                  ),
+                  tabPanel("About", value='tab4_val', id = 'tab4',
+                           wellPanel( p(""),
+                                      p(HTML("Calculates the minimum sample size required for a desired relative 
+                                                      standard error (RSE) of the incidence estimat given assay characteristics,
+                                                      reference epidemic state, design effects and recency test coverage.")),
+                                      p("Contributors:"),
+                                      tags$ul(
+                                        tags$li("Lamin Juwara"),
+                                        tags$li("Eduard Grebe"),
+                                        tags$li("Stefano Ongarello"),
+                                        tags$li("Cari van Schalkwyk"),
+                                        tags$li("Alex Welte")
+                                      ),
+                                      p(em("Built using", a(strong("inctools"), href = "https://cran.r-project.org/web/packages/inctools/index.html", target = "_blank")))
+                           )
+                  )
                   
-      )
+      ),
+      fluidRow(
+        br(""),
+        plotOutput("plot1")
+               # tabsetPanel(type = "tabs",
+               #             tabPanel("plot", 
+               #                      plotOutput("plot1")) )
+        )
+
+      
     )
   )
 ))

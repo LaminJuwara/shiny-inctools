@@ -1,0 +1,72 @@
+﻿User Guide
+ Assay-Based Incidence Estimation (ABIE) v3:
+ Incidence_Difference_Calculator
+ 
+It is recommended that users of the Incidence_Difference_Calculator workbook read through this calculator-specific user guide before using the calculator.
+ 
+In addition to this workbook-specific guide, users will need to familiarise themselves with the overall ABIE user guide/version 3 release note, which can be found on a separate tab <About ABIE v3> in this workbook.  The overall ABIE guide provides important contextual information, including suggested further reading, relevant to the correct use of this tool; in particular, critical information on 
+nuanced concepts around input requirements and the meaning of outputs, and
+licensing and citation.
+ 
+Summary
+This tool estimates a difference in HIV incidence from two cross-sectional surveys which each tested for HIV and followed up by testing for biomarkers of recent infection amongst HIV positives, given 
+sample counts from the two surveys 
+characteristics of the recency test(s) used in the surveys
+estimates, for each survey, of “design effects” for the precision of cluster based sampling estimates of a) HIV prevalence, and b) the proportion of “recent infections” among HIV positives tested for recency
+ 
+A 95% confidence interval (CI) and a p-value for the incidence difference are also reported. 
+ 
+Three cases are distinguished:
+Case I: The two surveys used the same recency test, with a single estimate of MDRI and a single estimate of FRR to be used for analysis of all data
+Case II: The two surveys used the same recency test, with a single estimate of MDRI, but with FRRs that are independently estimated in each survey context
+Case III: The two surveys used independently estimated MDRIs (possibly for different tests, and different associated cut-off times T) and independently estimated FRRs
+ 
+Crucial note on choice of null hypothesis and calculation of p-values 
+It is not uncommon for a null hypothesis to be underspecified until the final data is available, i.e. for certain details (such as a hypothetically shared value of a test statistic) to be specified (estimated) in light of the data.  In the present situation, the hypothetically common value of incidence, as well as the (potentially different by context) values of prevalence, cannot be reasonably supplied without seeing the data.  Once data is available, there is further no unique, obviously correct, approach to deriving these parameters, and different choices can be entertained.  The simplest, but not necessarily optimal, (indeed potentially problematic) approach is to hypothesize that the two survey populations are identical in terms of incidence AND prevalence, as this suggests a naïve pooling of all data to provide the hypothetically common values.  However, a simple test for difference of prevalence would be expected to lead to the rejection of the null hypothesis (of equal prevalence) in many, if not most, cases, as prevalence will be relatively precisely estimatable in any survey remotely powered to estimate incidence. Hence, a more flexible approach to the null hypothesis is required.
+ 
+The approach taken in the present tool is to: 
+hypothesize that the incidence is the same in the two contexts
+be agnostic on the matter of the value of this shared incidence
+hypothesize that the estimated value of the variance of the incidence difference estimate (calculated carefully in accordance with the choice of how test properties are shared between the surveys) is a good estimate of the actual variance of the incidence difference. (This is equivalent to a routinely made assumption in less complex situations) 
+allow the prevalence for each context to be independently estimated from the data from that context.  (Note that even if the data does not support the rejection of the hypothesis that the prevalences are identical, there is little or no advantage in constructing the null hypothesis to include equal prevalence.)
+ 
+The preceding assumptions allow the calculation of a p-value, which is done according to a two-tailed test, capturing the point that the experimenter has no basis to pre-determine the acceptable direction of any incidence difference.
+ 
+Worksheets in this Workbook
+The Incidence Difference Calculator contains six worksheets or tabs:
+<About ABIE v3>: introduction to the ABIE toolbox in general and major release three
+<User Guide>: this document
+<Incidence Difference (I)>
+<FRR Sensitivity (I)> 
+<Incidence Difference (II)>
+<FRR Sensitivity (II)>
+<Incidence Difference (III)>
+<FRR Sensitivity (III)>
+ 
+The three pairs of Incidence Difference/FRR Sensitivity sheets correspond to the three cases (I, II and III) described above.  The Incidence Difference sheets are used both to enter inputs (sample counts, characteristics of recency test(s) and survey designs) and to display results (estimated incidence difference and 95% CI and p-value for incidence difference).  The inputs of the Incidence Difference sheets differ only to the extent required by the differences between the three cases; the sheets are otherwise identical. The FRR Sensitivity sheets display graphs of the incidence difference estimate and p-value as functions of a hypothetical FRR (Case I) or of two hypothetical FRRs (Cases II and III).  The sheets are described in more detail below.
+ 
+<Difference Estimate (I/II/III)>
+Context:
+Two cross-sectional surveys have been carried out with a recency test (or recency tests) whose properties (MDRI and FRR) have been estimated.  Both HIV status and recent/non recent infection status amongst HIV positives have been ascertained (although not necessarily for all subjects). 
+ 
+Utility:
+These sheets calculate a separate incidence estimate for each of the two surveys and an estimate of the incidence difference.  The relative standard errors of the two individual incidence estimates are calculated as in the Incidence_Prevalence_Calculator, and the estimate of the relative standard error of the incidence difference is calculated to be consistent with the choice made among the three cases, which determines the extent of “recycling” of test property estimates between the two individual incidence estimates.  A 95% CI and p-value for the incidence difference are also reported.
+ 
+Note:
+As in the other workbooks, subjects whose HIV status was left unascertained are nowhere accounted for in this analysis.
+The calculation does account for HIV positive subjects whose recent/non-recent status was unascertained.
+Incidences (and thus incidence difference) are reported as “instantaneous rates”, with units of % per annum (p.a.).
+Warnings about negative incidence estimates are indeed “warnings’ and not “errors”, even though, physically, incidence of course takes strictly non-negative values.
+The relative standard error of an individual incidence estimate is not reported if the estimate is less than or equal to zero.
+The relative standard error of the incidence difference estimate is not reported if the estimate is zero; it is reported in all other cases. 
+If the p-value for the incidence difference is greater than or equal to 0.0005, it is displayed to three decimal places; if it is below 0.0005, it is displayed as “<0.001”. 
+ 
+<FRR Sensitivity (I/II/III)>
+Each of these sheets plots the incidence difference and p value as a function of a hypothetical FRR (Case I) or as a function of two hypothetical FRRs (Cases II and III).  Each FRR Sensitivity sheet is linked its corresponding Incidence Difference sheet – a change to an input on an Incidence Difference sheet will automatically carry through to the figures.  Intermediate results required to populate the figures are found on hidden sheets, which may be unhidden without password (home tab, cells toolbar, format button → drop down menu: hide & unhide → secondary dropdown, unhide sheet).
+ 
+Note:
+In Case I the two surveys use the same FRR estimate – and so a single two-dimensional figure suffices and also shows a 95% CI for incidence difference. 
+In Cases II and III the two surveys use independent FRR estimates – the figures are thus three-dimensional, and a 95% CI for incidence difference is not included. 
+The FRRs are hypothetical, assumed to be known precisely.
+The graphs show values of the hypothetical FRR(s) from 0 to 4%. This is for completeness only, and should not be interpreted as suggesting the higher values in this range are likely to lead to informative estimates. 
+

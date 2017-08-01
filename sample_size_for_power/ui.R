@@ -196,7 +196,7 @@ shinyUI(fluidPage(
                            br("ss: Minimal number of subjects required")),
                   tabPanel("User Guide", value='tab3_val', id = 'tab3',
                            wellPanel( p(""),
-                                      p(HTML("Calculates foo."))
+                                      wellPanel(includeHTML("sample_size_calculator.html"))
                                       )
                   ),
                   tabPanel("About", value='tab4_val', id = 'tab4',

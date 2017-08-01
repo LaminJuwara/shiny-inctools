@@ -247,7 +247,9 @@ shinyUI(fluidPage(
                              br(),
                              br()),
                     tabPanel("User Guide", value='tab3_val', id = 'tab3',
-                             p("")),
+                             wellPanel(includeHTML("incidence_difference_calculator.html"))
+                             #includeHTML("incidence_difference_calculator.html")
+                             ),
                     tabPanel("About", value='tab4_val', id = 'tab4',
                              wellPanel( p(""),
                                         p(HTML("Calculates the minimum sample size required for a desired relative 
