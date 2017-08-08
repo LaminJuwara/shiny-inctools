@@ -22,9 +22,11 @@ shinyUI(fluidPage(
   sidebarLayout(
     sidebarPanel(
       fluidPage(
-        fluidRow(column(3, downloadButton('downloadData', 'Download table')),
-                 column(3, downloadButton('downloadPlot', 'Save plot'))),
-    
+        fluidRow(column(6, downloadButton('downloadData', 'Download table'))),
+        fluidRow(column(6, downloadButton('downloadPlot', 'Save plot'))),
+        #hr(),
+        #fluidRow((column(9, shinyURL.ui(label = "URL with current parameters")))),
+        #hr(),
         fluidRow(
           h3("Analysis parameters"),
           column(9, selectInput("x_variable", label = "Choose analysis type",
@@ -35,9 +37,9 @@ shinyUI(fluidPage(
                                 ), selected = "MDRI"))),
         fluidRow(column(9,
                         radioButtons("scenario_case", label = h5("Scenario case type:"),
-                                     c("Same MDRI, same FRR estimates in the two surveys" = 1,
-                                       "Same MDRI, but different FRR estimates in the two surveys" = 2,
-                                       "Different MDRI and FRR estimates in the two surveys" = 3)),
+                                     c("Case 1 (Same MDRI, same FRR estimates in the two surveys)" = 1,
+                                       "Case 2 (Same MDRI, but different FRR estimates in the two surveys)" = 2,
+                                       "Case 3 (Different MDRI and FRR estimates in the two surveys)" = 3)),
                         selected = 1)
         ),
         fluidRow(column(9,
@@ -49,13 +51,28 @@ shinyUI(fluidPage(
         ),
         conditionalPanel(
           condition = "input.scenario_case != 3 & input.x_variable == 'MDRI'",
+          #sliderInput("MDRI_range", label = "MDRI range", min = 60, max = 900, value = c(120, 720), step = 10, animate = TRUE)
           sliderInput("MDRI_range", label = "MDRI range", min = 60, max = 720, value = c(120, 360), step = 10, animate = FALSE)
         )
 
-
+        #         fluidRow(column(9,
+        #                         h3("MDRI range"),
+        #                         sliderInput("MDRI_range", "", min = 100, max = 900, value = c(120, 720)))),
+        #         fluidRow(column(9,
+        #                         h3("FRR range"),
+        #                         sliderInput("FRR_range", "", min = 0, max = 15, value = c(0, 10))))
       ),
+      #       column(6,
+      #              selectInput("x_variable", label = h5("Choose x-axis variable"),
+      #                          choices = list("MDRI" = "MDRI", "FRR" = "frrhat"
+      #                          ), selected = "MDRI"),
+      #                downloadButton('downloadData', 'Download table')),
+      #
 
-      # here we set-up another fluid page in the same side panel
+
+      #       downloadButton('downloadData', 'Download'),
+
+      #
       hr(),
       fluidPage(
         h3("Assay parameters"),
@@ -120,6 +137,15 @@ shinyUI(fluidPage(
                    sliderInput("FRR_range_sim2", label = "FRR range", min = 0, max = 15, value = c(0, 10), step = 0.25)
                  ),
                  numericInput("TIME", label = h5("Cut-off time T (days)"), value = 730, step = 10)
+                 # numericInput("frrhat", label = h5("Value for FRR (%)"), value = 1),
+                 # numericInput("MDRI", label = h5("Value for MDRI (days)"), value = 360),
+                 #                  numericInput("TIME", label = h5("Cut-off time T (days)"), value = 730, step = 10),
+                 #                  numericInput("inc_1", label = h5("Incidence in survey 1 (%)"), value = 5, step = 0.1),
+                 #                  numericInput("inc_2", label = h5("Incidence in survey 2 (%)"), value = 2.5, step = 0.1),
+                 #                  numericInput("p_pos_1", label = h5("Prevalence in survey 1 (%)"), value = 15, step = 0.1),
+                 #                  numericInput("p_pos_2", label = h5("Prevalence in survey 2 (%)"), value = 12, step = 0.1),
+                 #                  numericInput("power", label = h5("Power required"), value = 0.8, step = 0.01),
+                 #                  numericInput("alpha", label = h5("Significance level (alpha)"), value = 0.1, step = 0.1)
           ),
 
           column(6,
@@ -137,7 +163,14 @@ shinyUI(fluidPage(
                    condition = "input.scenario_case != 1",
                    numericInput("frrhatcov_1", label = h5("FRR estimate standard error for survey 1 (%)"), value = 20, step = 0.1),
                    numericInput("frrhatcov_2", label = h5("FRR estimate standard error for survey 2 (%)"), value = 20, step = 0.1))
-                
+                 # numericInput("frrhatcov", label = h5("FRR estimate covariance (%)"), value = 20),
+                 #numericInput("mdrihatcov", label = h5("MDRI estimate covariance (%)"), value = 5),
+                 #numericInput("rec_test_coverage_1", label = h5("Percentage of HIV positives tested for recency in survey 1"), value = 100, step = 1),
+                 #numericInput("rec_test_coverage_2", label = h5("Percentage of HIV positives tested for recency in survey 2"), value = 100, step = 1)
+                 #                  numericInput("DE_prev_1", label = h5("D.E. HIV infection prevalence in survey 1"), value = 1, , step = 0.2),
+                 #                  numericInput("DE_prev_2", label = h5("D.E. HIV infection prevalence in survey 2"), value = 1, step = 0.2),
+                 #                  numericInput("DE_RgivenTested_1", label = h5("D.E. recent infection prevalence among positives in survey 1"), value = 1, step = 0.2),
+                 #                  numericInput("DE_RgivenTested_2", label = h5("D.E. recent infection prevalence among positives in survey 2"), value = 1, step = 0.2)
           )
         )),
       hr(),
@@ -145,10 +178,14 @@ shinyUI(fluidPage(
         h3("Survey parameters"),
         fluidRow(
           column(6,
+                 #numericInput("TIME", label = h5("Cut-off time T (days)"), value = 730, step = 10),
                  numericInput("inc_1", label = h5("Incidence in survey 1 (%)"), value = 5, step = 0.1),
+                 #numericInput("inc_2", label = h5("Incidence in survey 2 (%)"), value = 2.5, step = 0.1),
                  numericInput("p_pos_1", label = h5("Prevalence in survey 1 (%)"), value = 15, step = 0.1),
                  numericInput("rec_test_coverage_1", label = h5("Percentage of HIV positives tested for recency in survey 1"), value = 100, step = 1),
+                 #numericInput("p_pos_2", label = h5("Prevalence in survey 2 (%)"), value = 12, step = 0.1),
                  numericInput("power", label = h5("Power required"), value = 0.8, step = 0.01)
+                 #numericInput("alpha", label = h5("Significance level (alpha)"), value = 0.1, step = 0.1)
           ),
 
           column(6,
@@ -166,12 +203,15 @@ shinyUI(fluidPage(
         fluidRow(
           column(6,
                  numericInput("DE_prev_1", label = h5("Infection prevalence in survey 1"), value = 1, step = 0.1),
+                 #numericInput("DE_prev_2", label = h5("D.E. HIV infection prevalence in survey 2"), value = 1, step = 0.2),
                  numericInput("DE_RgivenTested_1", label = h5("Recent infection prevalence among positives in survey 1"), value = 1, step = 0.1)),
+          #numericInput("DE_RgivenTested_2", label = h5("D.E. recent infection prevalence among positives in survey 2"), value = 1, step = 0.2)),
           column(6,
                  numericInput("DE_prev_2", label = h5("Infection prevalence in survey 2"), value = 1, step = 0.1),
                  numericInput("DE_RgivenTested_2", label = h5("Recent infection prevalence among positives in survey 2"), value = 1, step = 0.1))
         )
       )
+      #, shinyURL.ui()
       ),
     mainPanel(
       img(src='FIND_logo.jpg', align = "right", height = "75px"),
@@ -180,6 +220,7 @@ shinyUI(fluidPage(
       #plotOutput("plot")
       tabsetPanel(type = "tabs",
                   tabPanel("Plot", plotOutput("plot", width = "100%", height = "600px")),
+                  # tabPanel("Summary", verbatimTextOutput("summary")),
                   tabPanel("Table", tableOutput("tab"),
                            p(""),
                            p("Table legend"),

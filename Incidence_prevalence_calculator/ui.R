@@ -15,57 +15,93 @@ library(shiny)
 
 shinyUI(fluidPage(
 
-  # Application title
-  titlePanel("Incidence/Prevalence Calculator"),
+  # Application title  # formerly called the incidence/Prevalence calculator
+  titlePanel("Incidence Calculator"),
   br(),
   sidebarLayout(
     sidebarPanel(
+
+      # wellPanel(
+      #   fluidPage(
+      # 
+      #   fluidRow(column(12,
+      #                   downloadButton('downloadData1', 'Download Estimates'))),
+      #   fluidRow(column(12,
+      #                   downloadButton('downloadData2', 'Download Estimates')))
+      # )),
       wellPanel(
-        fluidPage(
-          # fluidRow(
-          #   column(5, downloadButton('downloadData', 'Download Estimates')),
-          #   column(5, downloadButton('downloadPlot', 'Save Plot')))
-        fluidRow(column(12,
-                        downloadButton('downloadData', 'Download Estimates')))
-      )),
-      wellPanel(
-        fluidPage(
-        h3("Sample Counts"),
-        fluidRow(column(12,
-                        numericInput("N", 
-                                     label = "Total Sample Size",
-                                     value = 5000, 
-                                     step = 1)
-        )),
-        fluidRow(
-          column(12,
-                 numericInput("N_H", 
-                              label = "Number of HIV positive among total",
-                              # min = 0,
-                              # max = "input.N",
-                              value = 1000, 
-                              step = 1)
-          )
-        ),
-        fluidRow(column(12,
-                        numericInput("N_testR", 
-                                     label = "HIV positives tested for recency",
-                                     # min = 0,
-                                     # max = "input.N_H",
-                                     value = 1000, 
-                                     step = 1)
-        )),
-        fluidRow(
-          column(12,
-                 numericInput("N_R", 
-                              label = "Number of recent cases",
-                              # min = 0,
-                              # max = "input.N_testR",
-                              value = 50, 
-                              step = 1 )
-          )
+        fluidRow(column(9,
+                        radioButtons("data_type", label = h3("Data Type:"),
+                                     c("Sample Counts" = 2,
+                                       "Proportions" = 1
+                                       )),
+                        selected = 2)
         )
-      )),
+      ),
+      conditionalPanel(
+        condition = "input.data_type == 1",
+        wellPanel(
+          fluidPage(
+            h3("Sample Proportions"),
+            fluidRow(
+              column(6, 
+                     numericInput("PrevH",
+                                  label = h5("Prevalence of HIV infection (%)"),
+                                  value = 20, step = 0.1, min=0, max = 100),
+                     numericInput("PrevR",
+                                  label = h5("Prevalence of recent infections among positives (%)"), value = 10, step = 0.1, min=0, max = 100)
+              ),
+              column(6,
+                     numericInput("RSE_PrevH",
+                                  label = h5("RSE of Prevalence HIV infection (%)"),
+                                  value = 2.8, 
+                                  step = 0.1, min=0, max = 100),
+                     numericInput("RSE_PrevR",
+                                  label = h5("RSE of Prevalence of recent infections among positives (%)"),
+                                  value = 9.8,
+                                  step = 0.1, min=0, max = 100))
+            )
+          ))
+      ),
+      
+      conditionalPanel(
+        condition = "input.data_type == 2",
+        wellPanel(
+          fluidPage(
+            h3("Sample Counts"),
+            fluidRow(column(12,
+                            numericInput("N", 
+                                         label = "Total Sample Size",
+                                         value = 5000, 
+                                         step = 1)
+            )),
+            fluidRow(
+              column(12,
+                     numericInput("N_H", 
+                                  label = "Number of HIV positive among total",
+                                  value = 1000, 
+                                  step = 1)
+              )
+            ),
+            fluidRow(column(12,
+                            numericInput("N_testR", 
+                                         label = "HIV positives tested for recency",
+                                         value = 1000, 
+                                         step = 1)
+            )),
+            fluidRow(
+              column(12,
+                     numericInput("N_R", 
+                                  label = "Number of recent cases",
+                                  value = 50, 
+                                  step = 1 )
+              )
+            )
+          ))
+        
+      ),
+      conditionalPanel(
+        condition = "input.data_type == 1 | input.data_type == 2 ",
       wellPanel(
         # fluid page for the assay parameters
         fluidPage(
@@ -124,6 +160,8 @@ shinyUI(fluidPage(
                               step = 0.1)
           ))
       ))
+      )
+      
       ),
     mainPanel(
       fluidRow(
@@ -131,63 +169,81 @@ shinyUI(fluidPage(
                img(src='SACEMA_logo.jpg', align = "right", height = "75px")
                #img(src='mcgill.png', align = "right", height = "40px"),
         )),
-      tabsetPanel(type = "tabs",
-                  tabPanel("Estimated Prevalence", tableOutput("tab1"), 
-                           br(),
-                           p(""),
-                           p(strong('Definition of Parameters')),
-                           br("PrevH: Prevalence of HIV."),
-                           br("RSE_PrevH: Relative standard error of PrevH"),
-                           br("PrevR: Prevalence of recency"),
-                           br("RSE_PrevR: Relative standard error of PrevR")
-                  ),
-                  tabPanel("Estimated Incidence", tableOutput("tab2"),
-                           br(),
-                           p(""),
-                           p(strong('Definition of Parameters')),
-                           br("Incidence: Estimated incidence"),
-                           br("CI.low: Confidence interval(lower limit)"),
-                           br("CI.up: Confidence interval(upper limit)"),
-                           br("RSE: Relative standard error of incidence estimate")),
-                  tabPanel("Risk of Infection", tableOutput("tab3"),
-                           br(),
-                           p(""),
-                           p(strong('Definition of Parameters')),
-                           br("ARI: Annual Risk of Infection"),
-                           br("ARI.CI.low: Lower confidence limit of Annual Risk of Infection"),
-                           br("ARI.CI.up: Upper confidence limit of Annual Risk of Infection")),
-                  tabPanel("User Guide", value='tab3_val', id = 'tab3',
-                           wellPanel( p(""),
-                                      wellPanel(includeHTML("Incidence_Prevalence_Calculator.html"))
-                           )
-                  ),
-                  tabPanel("About", value='tab4_val', id = 'tab4',
-                           wellPanel( p(""),
-                                      p(HTML("Calculates the minimum sample size required for a desired relative 
-                                                      standard error (RSE) of the incidence estimat given assay characteristics,
-                                                      reference epidemic state, design effects and recency test coverage.")),
-                                      p("Contributors:"),
-                                      tags$ul(
-                                        tags$li("Lamin Juwara"),
-                                        tags$li("Eduard Grebe"),
-                                        tags$li("Stefano Ongarello"),
-                                        tags$li("Cari van Schalkwyk"),
-                                        tags$li("Alex Welte")
-                                      ),
-                                      p(em("Built using", a(strong("inctools"), href = "https://cran.r-project.org/web/packages/inctools/index.html", target = "_blank")))
-                           )
-                  )
-                  
-      ),
-      fluidRow(
-        br(""),
-        plotOutput("plot1")
-               # tabsetPanel(type = "tabs",
-               #             tabPanel("plot", 
-               #                      plotOutput("plot1")) )
+      conditionalPanel(
+        condition = "input.data_type == 2",
+        tabsetPanel(type = "tabs",
+                    tabPanel("Incidence Estimates",
+                             br(""),
+                             fluidRow(column(12,
+                                               downloadButton('downloadData1', 'Download Estimates'))
+                             ),
+                             br(""),
+                             tableOutput("tab4"),
+                             fluidRow(
+                               plotOutput("plot1")
+                             )),
+                    tabPanel("About", value='tab4_val', id = 'tab4',
+                             wellPanel( p(""),
+                                        p(HTML("Calculates the point estimate and confidence interval for incidence, prevalence and
+                                             annual risk of infection.")),
+                                        p("Contributors:"),
+                                        tags$ul(
+                                          tags$li("Lamin Juwara"),
+                                          tags$li("Eduard Grebe"),
+                                          tags$li("Stefano Ongarello"),
+                                          tags$li("Cari van Schalkwyk"),
+                                          tags$li("Alex Welte")
+                                        ),
+                                        p(em("Built using", a(strong("inctools"), href = "https://cran.r-project.org/web/packages/inctools/index.html", target = "_blank")))
+                             )
+                    )
         )
+        ),
+      conditionalPanel(
+        condition = "input.data_type == 1",
+        tabsetPanel(type = "tabs",
+                    tabPanel("Incidence Estimates",
+                             br(""),
+                             fluidRow(column(12,
+                                               downloadButton('downloadData2', 'Download Estimates'))
+                             ),
+                             br(""),
+                             tableOutput("tab5b"),
+                             tableOutput("tab5"),
+                             br(),
+                             p(""),
+                             p(strong('Definition of Parameters')),
+                             br("Incidence: Estimated incidence"),
+                             br("CI.low: Confidence interval(lower limit)"),
+                             br("CI.up: Confidence interval(upper limit)"),
+                             br("RSE: Relative standard error of incidence estimate"),
+                             br("ARI: Annual Risk of Infection"),
+                             br("ARI.CI.low: Lower confidence limit of Annual Risk of Infection"),
+                             br("ARI.CI.up: Upper confidence limit of Annual Risk of Infection")
+                             ),
 
-      
+                    tabPanel("User Guide", value='tab3_val', id = 'tab3',
+                             wellPanel( p(""),
+                                        wellPanel(includeHTML("Incidence_Prevalence_Calculator.html"))
+                             )
+                    ),
+                    tabPanel("About", value='tab4_val', id = 'tab10',
+                             wellPanel( p(""),
+                                        p(HTML("Calculates the point estimate and confidence interval for incidence, prevalence and
+                                             annual risk of infection.")),
+                                        p("Contributors:"),
+                                        tags$ul(
+                                          tags$li("Lamin Juwara"),
+                                          tags$li("Eduard Grebe"),
+                                          tags$li("Stefano Ongarello"),
+                                          tags$li("Cari van Schalkwyk"),
+                                          tags$li("Alex Welte")
+                                        ),
+                                        p(em("Built using", a(strong("inctools"), href = "https://cran.r-project.org/web/packages/inctools/index.html", target = "_blank")))
+                             )
+                    ))
+      )
+
     )
   )
 ))

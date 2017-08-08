@@ -188,7 +188,11 @@ plot_title <- function(x_var = "MDRI", power = 0.8, alpha = 0.1, inc_1 = 5, inc_
     title <- paste0("Required sample size \n",
                     "Power: ", power, " Alpha: ", alpha, "%, T: ", TIME, " days\n",
                     "Inc_1: ", inc_1, "% Inc_2: ", inc_2, "% Prev_1: ", p_pos_1, "% Prev_2: ", p_pos_2, "%\n")}
-
+#
+#   if("simulate_FRR" == x_var & 1 == scenario_case) {
+#     title <- paste0("Required sample size \n",
+#                     "Power: ", power, " Alpha: ", alpha, "%, T: ", TIME, " days\n",
+#                     "Inc_1: ", inc_1, "% Inc_2: ", inc_2, "% Prev_1: ", p_pos_1, "% Prev_2: ", p_pos_2, "%\n")}
 
   return(title)
 }
@@ -222,3 +226,7 @@ legendbox_text <- function(scenario_case = 1, x_var = "MDRI",
   }
   return(legend)
 }
+
+# plot_title(x_var = x_var,
+#            power = 0.8, alpha = 0.1, inc_1 = 5, inc_2 = 2.5, TIME = 720,
+#            p_pos_1 = 15, p_pos_2 = 15, FRR = 1, FRR_1 = 1.5, FRR_2 = 2, MDRI = 360, case_scenario = 1)

@@ -27,8 +27,7 @@ shinyServer(function(input, output, session) {
   df <- reactive({
 
     if("MDRI" == input$x_variable & 1 == input$scenario_case) {
-      temp <- mdply(expand.grid(MDRI = seq(input$MDRI_range[1], input$MDRI_range[2], by = 30), 
-                                frrhat = (1/100)*input$frrhat,
+      temp <- mdply(expand.grid(MDRI = seq(input$MDRI_range[1], input$MDRI_range[2], by = 30), frrhat = (1/100)*input$frrhat,
                                 TIME = input$TIME,
                                 frrhatcov = (1/100)*input$frrhatcov,
                                 mdrihatcov = (1/100)*input$mdrihatcov,

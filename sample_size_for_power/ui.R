@@ -172,7 +172,6 @@ shinyUI(fluidPage(
       fluidRow(
         column(12,
                img(src='SACEMA_logo.jpg', align = "right", height = "75px")
-               #img(src='mcgill.png', align = "right", height = "40px"),
         )),
       br(),
       #plotOutput("plot")
@@ -201,9 +200,8 @@ shinyUI(fluidPage(
                   ),
                   tabPanel("About", value='tab4_val', id = 'tab4',
                            wellPanel( p(""),
-                                      p(HTML("Calculates the minimum sample size required for a desired relative 
-                                               standard error (RSE) of the incidence estimat given assay characteristics,
-                                               reference epidemic state, design effects and recency test coverage.")),
+                                      p(HTML("Calculates the minimum sample size (common to the two surveys) required for a desired probability
+                                      of detecting difference in incidence (with the correct sign).")),
                                       p("Contributors:"),
                                       tags$ul(
                                         tags$li("Lamin Juwara"),
